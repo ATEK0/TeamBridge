@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, flash, jsonify, send_file, redirect
 from flask_login import login_required, current_user
 
+from werkzeug.utils import secure_filename
+
 import os
 
 import json
@@ -39,12 +41,24 @@ def file_explorer():
     return render_template("file_explorer.html", client=current_user, files=file_list)
 
 @views.route('/file-explorer/download/<path:filename>', methods=["GET","POST"])
+@login_required
 def download(filename):
     print("ta no download")
     user = current_user.query.get(current_user.id)
     path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}\{filename}'
     redirect("/file-explorer")
     return send_file(path, as_attachment=True)
+
+
+@views.route('/file-explorer/upload', methods=['POST'])
+def upload_file():
+    print("ta no upload")
+    user = current_user.query.get(current_user.id)
+    if request.method == 'POST':
+      f = request.files['file']
+      path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}\{secure_filename(f.filename)}'
+      f.save(path)
+      return redirect('/file-explorer')
 
 
 @views.route('/delete-note', methods=["POST"])

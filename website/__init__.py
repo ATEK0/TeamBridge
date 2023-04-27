@@ -11,6 +11,9 @@ def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = 'EIgKcwiAndmX3qL6sMDCVQABJOY12rGeQXsY9Ri9S9h41ivryU'
     app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{DB_NAME}'
+    app.config['UPLOAD_FOLDER'] = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files'
+    app.config['MAX_CONTENT_PATH'] = 1096
+    # app.config['SERVER_NAME'] = "pigcenter.local"
     db.init_app(app)
     
     from .views import views

@@ -6,3 +6,12 @@ function deleteNote(id) {
         location.href="/";
     })
 }
+
+function uploadFile(filename) {
+    fetch('/file-explorer/upload', {
+        method: 'POST',
+        body: JSON.stringify({file: filename})
+    }).then((_res) => {
+        location.href="/file-explorer";
+    })
+}

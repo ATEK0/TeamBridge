@@ -15,9 +15,7 @@
 {% if files %}
 
     {% for file in files %}
-        <div style="display: flex;">
-            <p>{{ file }}</p><a href="{{ url_for('views.download', filename=file) }}"><button type="button" class="btn btn-warning">Download</button></a>
-        </div>
+        <p>{{ file }}</p><a href="{{ url_for('views.download', filename=file) }}"><button type="button" class="btn btn-warning">Download</button></a>
     {% endfor%}
 
 {% else %}
