@@ -1,0 +1,68 @@
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+
+from .models import User
+from werkzeug.security import generate_password_hash, check_password_hash
+from . import db
+from flask_login import login_user, login_required, logout_user, current_user
+
+auth = Blueprint('auth', __name__)
+
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
+    #data = request.form pega em todos os dados do form e guarda num array
+    
+    if request.method == 'POST':
+        email = request.form.get("email")
+        password = request.form.get("pssw")
+        
+        user = User.query.filter_by(email = email).first()
+        
+        if user:
+            if check_password_hash(user.password, password):
+                flash("Estás logado!", category="success")
+                login_user(user, remember=True)
+                return redirect(url_for("views.home"))
+            else:
+                flash("Password errada", category="error")
+        else:
+            flash("Email don't exists", category="error")
+                     
+    return render_template("login.html", client=current_user)
+
+@auth.route('/logout')
+@login_required
+def logout():  
+    logout_user()
+    return redirect(url_for("auth.login"))
+
+@auth.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form.get("email")
+        fname = request.form.get("firstName")
+        pssw = request.form.get("pssw")
+        pssw1 = request.form.get("pssw1")
+        
+        user = User.query.filter_by(email = email).first()
+        
+        if user:
+            flash("There is an account with that email!", category="error")
+        
+        elif len(email) < 4:
+            flash("O teu email é muito pequeno, deve ter mais do que 3 letras", category="error")
+        elif len(fname) < 2:
+            flash("O teu nome deve ser maior do que 1 caracter", category="error")
+        elif pssw != pssw1:
+            flash("As passwords não coincidem", category="error")
+        elif len(pssw) < 7:
+            flash("Password deve ser pelo menos maior do que 6 caracteres", category="error")
+        else:
+            new_user = User(email=email, first_name=fname, password=generate_password_hash(pssw, method="sha256"))
+            db.session.add(new_user)
+            db.session.commit()
+            flash("Conta criada com sucesso", category="success")
+            login_user(user, remember=True)
+            return redirect(url_for("views.home"))
+                    
+    return render_template("register.html", client=current_user)
+
