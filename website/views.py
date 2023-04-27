@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, send_file, redirect
 from flask_login import login_required, current_user
+
+import os
 
 import json
 from . import db
@@ -28,8 +30,24 @@ def home():
     return render_template("home.html", client=current_user)
 
 
+@views.route('/file-explorer', methods=["GET", "POST"])
+@login_required
+def file_explorer():
+    user = current_user.query.get(current_user.id)
+    file_list = os.listdir(f'./files/{user.id}')
+        
+    return render_template("file_explorer.html", client=current_user, files=file_list)
+
+@views.route('/file-explorer/download/<path:filename>', methods=["GET","POST"])
+def download(filename):
+    print("ta no download")
+    user = current_user.query.get(current_user.id)
+    path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}\{filename}'
+    redirect("/file-explorer")
+    return send_file(path, as_attachment=True)
+
+
 @views.route('/delete-note', methods=["POST"])
-# @login_required
 def deleteNote():
     note = json.loads(request.data)
     noteId = note['noteId']

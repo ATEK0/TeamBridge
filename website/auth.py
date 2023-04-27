@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 
+import os
+
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
@@ -60,8 +62,9 @@ def register():
             new_user = User(email=email, first_name=fname, password=generate_password_hash(pssw, method="sha256"))
             db.session.add(new_user)
             db.session.commit()
+            login_user(new_user, remember=True)
+            os.mkdir(f'./files/{current_user.id}')
             flash("Conta criada com sucesso", category="success")
-            login_user(user, remember=True)
             return redirect(url_for("views.home"))
                     
     return render_template("register.html", client=current_user)
