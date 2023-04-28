@@ -19,7 +19,7 @@
             <p style="padding:5px">{{ file.id }}</p>
             <p style="padding:5px">{{ file.filename }}</p>
             <p style="padding:5px">{{ file.uploadDate }}</p>
-            <a href="{{ url_for('views.download', fileId=file.id) }}"><button type="button" class="btn btn-warning">Download</button></a><a href="{{ url_for('views.deleteFile', fileId=file.id) }}"><button type="button" class="btn btn-danger">Delete</button></a>
+            <a href="{{ url_for('fileExplorer.download', fileId=file.id) }}"><button type="button" class="btn btn-warning">Download</button></a><a href="{{ url_for('fileExplorer.deleteFile', fileId=file.id) }}"><button type="button" class="btn btn-danger">Delete</button></a>
         </div>
     {% endfor%}
 

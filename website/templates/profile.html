@@ -9,6 +9,6 @@
 <b>Email: {{client.email}}</b><br><br>
 
 <b>Espaço total dos ficheiros: {{used_space}}%</b><br>
-<a href="{{ url_for('views.deleteAccount', id=client.id) }}"><button type="button">Apagar conta</button></a>
+<a href="{{ url_for('profilePage.deleteAccount', id=client.id) }}"><button type="button">Apagar conta</button></a>
 
 {% endblock %}

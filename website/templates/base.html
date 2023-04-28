@@ -28,11 +28,16 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbar">
+        
         <div class="navbar-nav"></div>
         {% if not client.is_authenticated %}
+          
           <a class="nav-item nav-link" id="login" href="/login">Login</a>
           <a class="nav-item nav-link" id="signUp" href="/register">Sign Up</a>
         {% else %}
+          <a class="navbar-brand" href="/profile">
+            <img style="background-color: white" src="{{client.profile_pic}}" width="30" height="30" class="d-inline-block align-top rounded-circle" alt="">
+          </a>
           <a class="nav-item nav-link" id="home" href="/">Home</a>
           <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
           <a class="nav-item nav-link" id="profile" href="/profile">{{ client.first_name }}</a>

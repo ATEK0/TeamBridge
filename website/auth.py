@@ -54,7 +54,9 @@ def register():
             fname = request.form.get("firstName")
             pssw = request.form.get("pssw")
             pssw1 = request.form.get("pssw1")
-            
+            pssw1 = request.form.get("pssw1")
+            profile = request.files["profile_pic"]
+            print(profile)
             user = User.query.filter_by(email = email).first()
             
             if user:
@@ -70,8 +72,17 @@ def register():
                 flash("Password deve ser pelo menos maior do que 6 caracteres", category="error")
             else:
                 new_user = User(email=email, first_name=fname, password=generate_password_hash(pssw, method="sha256"))
+                
                 db.session.add(new_user)
                 db.session.commit()
+                if profile:
+                    file_type = profile.content_type.split('/')[1]
+                    new_user.profile_pic = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\\profiles\{new_user.id}.{file_type}'
+                    path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\profiles\{new_user.id}.{file_type}'
+                    profile.save(path)
+                
+                db.session.commit()
+                
                 login_user(new_user, remember=True)
                 os.mkdir(f'./files/{current_user.id}')
                 flash("Conta criada com sucesso", category="success")

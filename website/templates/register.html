@@ -2,7 +2,7 @@
 {% block title %}Register{% endblock%}
 
 {% block content %}
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     <h3 align="center">Register</h3>
     <div class="form-group">
         <label for="email">Email Address:</label>
@@ -13,6 +13,8 @@
         <input type="password" class="form-control" id="pssw" name="pssw" placeholder="Enter Password"> 
         <label for="pssw1">Confirm Password:</label>
         <input type="password" class="form-control" id="pssw1" name="pssw1" placeholder="Enter Password Confirmation"> 
+        <label for="profile_pic">Profile Pic</label>
+        <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept="image/png, image/jpeg, image/jpg" maxlength="5000000">
     </div>
     <br>
     <button type="submit" class="btn btn-primary">Submit</button>

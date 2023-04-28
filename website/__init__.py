@@ -12,17 +12,20 @@ def create_app():
     app.config["SECRET_KEY"] = 'EIgKcwiAndmX3qL6sMDCVQABJOY12rGeQXsY9Ri9S9h41ivryU'
     app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{DB_NAME}'
     app.config['UPLOAD_FOLDER'] = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files'
-    app.config['MAX_CONTENT_PATH'] = 1096
     # app.config['SERVER_NAME'] = "pigcenter"
     db.init_app(app)
     
     from .views import views
+    from .fileExplorer import fileExplorer
     from .auth import auth
+    from .profilePage import profilePage
     
     app.register_blueprint(views, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
+    app.register_blueprint(profilePage, url_prefix="/")
+    app.register_blueprint(fileExplorer, url_prefix="/")
     
-    from .models import User, Note #ou entao posso usar import .models as models, especifiquei  nome pq n pode ter um . no inicio
+    from .models import User, Note, Files #ou entao posso usar import .models as models, especifiquei  nome pq n pode ter um . no inicio
     
     create_database(app)
     
