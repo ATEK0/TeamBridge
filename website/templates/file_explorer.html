@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<form method="POST" action = "http://localhost:5000/file-explorer/upload" enctype="multipart/form-data">
+<form method="POST" action="/file-explorer" enctype="multipart/form-data">
     <h3 align="center">Gestor de ficheiros</h3>
     <div class="form-group">
         <input type="file" class="form-control" id="file" name="file">
@@ -12,11 +12,14 @@
     <button type="submit" class="btn btn-primary">Upload</button>
 </form>
 
-{% if files %}
+{% if client.files %}
 
-    {% for file in files %}
-        <div style="display: flex;">
-            <p>{{ file }}</p><a href="{{ url_for('views.download', filename=file) }}"><button type="button" class="btn btn-warning">Download</button></a>
+    {% for file in client.files %}
+        <div style="display: flex;margin:10px;background-color:whitesmoke;padding:10px;">
+            <p style="padding:5px">{{ file.id }}</p>
+            <p style="padding:5px">{{ file.filename }}</p>
+            <p style="padding:5px">{{ file.uploadDate }}</p>
+            <a href="{{ url_for('views.download', fileId=file.id) }}"><button type="button" class="btn btn-warning">Download</button></a><a href="{{ url_for('views.deleteFile', fileId=file.id) }}"><button type="button" class="btn btn-danger">Delete</button></a>
         </div>
     {% endfor%}
 

@@ -7,7 +7,7 @@ class Note(db.Model):
     title = db.Column(db.String(150))
     text = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) #just one to one relations
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) #just one to many relations
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True) 
@@ -15,3 +15,10 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50))
     first_name = db.Column(db.String(150))
     notes = db.relationship('Note')
+    files = db.relationship("Files")
+    
+class Files(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    uploadDate = db.Column(db.DateTime(timezone=True), default=func.now())
+    filename = db.Column(db.String(300))
+    owner = db.Column(db.Integer, db.ForeignKey('user.id'))

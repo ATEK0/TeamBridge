@@ -13,7 +13,7 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{DB_NAME}'
     app.config['UPLOAD_FOLDER'] = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files'
     app.config['MAX_CONTENT_PATH'] = 1096
-    # app.config['SERVER_NAME'] = "pigcenter.local"
+    # app.config['SERVER_NAME'] = "pigcenter"
     db.init_app(app)
     
     from .views import views

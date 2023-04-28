@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+<p>Isto é o login</p>
+
+<b>Nome de utilizador: {{client.first_name}}</b><br>
+<b>Email: {{client.email}}</b><br><br>
+
+<b>Espaço total dos ficheiros: {{used_space}}%</b><br>
+<a href="{{ url_for('views.deleteAccount', id=client.id) }}"><button type="button">Apagar conta</button></a>
+
+{% endblock %}
