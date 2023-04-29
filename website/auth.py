@@ -27,9 +27,9 @@ def login():
                     login_user(user, remember=True)
                     return redirect(url_for("views.home"))
                 else:
-                    flash("Password errada", category="error")
+                    flash("Password errada", category="danger")
             else:
-                flash("Email don't exists", category="error")
+                flash("Email don't exists", category="danger")
                      
     return render_template("login.html", client=current_user)
 
@@ -60,16 +60,16 @@ def register():
             user = User.query.filter_by(email = email).first()
             
             if user:
-                flash("There is an account with that email!", category="error")
+                flash("There is an account with that email!", category="danger")
             
             elif len(email) < 4:
-                flash("O teu email é muito pequeno, deve ter mais do que 3 letras", category="error")
+                flash("O teu email é muito pequeno, deve ter mais do que 3 letras", category="danger")
             elif len(fname) < 2:
-                flash("O teu nome deve ser maior do que 1 caracter", category="error")
+                flash("O teu nome deve ser maior do que 1 caracter", category="danger")
             elif pssw != pssw1:
-                flash("As passwords não coincidem", category="error")
+                flash("As passwords não coincidem", category="danger")
             elif len(pssw) < 7:
-                flash("Password deve ser pelo menos maior do que 6 caracteres", category="error")
+                flash("Password deve ser pelo menos maior do que 6 caracteres", category="danger")
             else:
                 new_user = User(email=email, first_name=fname, password=generate_password_hash(pssw, method="sha256"))
                 

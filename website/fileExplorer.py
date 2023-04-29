@@ -33,20 +33,23 @@ def file_explorer():
     duplicated = False
     if request.method == "POST":
         file = request.files["file"]
-        existance = Files.query.filter_by(owner = user.id).all()
-        upload = Files(filename=file.filename, owner = current_user.id)
-        for exist in existance:
-            if exist.filename == file.filename:
-                duplicated = True
-        
-        if not duplicated:
-            db.session.add(upload)
-            db.session.commit()
-        
-            path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}\{file.filename}'
-            file.save(path)
+        if file:
+            existance = Files.query.filter_by(owner = user.id).all()
+            upload = Files(filename=file.filename, owner = current_user.id)
+            for exist in existance:
+                if exist.filename == file.filename:
+                    duplicated = True
+            
+            if not duplicated:
+                db.session.add(upload)
+                db.session.commit()
+            
+                path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}\{file.filename}'
+                file.save(path)
+            else:
+                flash("Já existe um ficheiro com esse nome, apague-o ou mude o nome do mesmo", "danger")
         else:
-            flash("Já existe um ficheiro com esse nome, apague-o ou mude o nome do mesmo", "error")
+            flash("Insira um ficheiro", "warning")
         
     return render_template("file_explorer.html", client=user)
 

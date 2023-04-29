@@ -3,12 +3,40 @@
 
 {% block content %}
 
+
 <p>Isto é o login</p>
 
-<b>Nome de utilizador: {{client.first_name}}</b><br>
-<b>Email: {{client.email}}</b><br><br>
 
-<b>Espaço total dos ficheiros: {{used_space}}%</b><br>
+<form method="POST" enctype="multipart/form-data">
+
+    <b>Username: <input type="text" class="form-control" id="username" name="username" placeholder="{{client.first_name}}"></b><br>
+    <b>Email: <input type="email" class="form-control" id="email" name="email" placeholder="{{client.email}}"></b><br>
+    <b>Password: <input class="form-control" type="password" id="passwordNow" name="passwordNow"></b><br>
+    <b>Confirm Password: <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm"></b><br>
+    <b>Profile Picture: <input type="password" class="form-control" id="profile_pic" name="profile_pic"></b><br>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+
+</form>
+
+<b>Espaço ocupado:</b><br>
+
+<div class="progress">
+    {% if used_space <= 60 %}
+        <div class="progress-bar bg-success" role="progressbar" style="width: {{used_space}}%;" aria-valuenow="{{used_space}}" aria-valuemin="0" aria-valuemax="100">{{used_space}}%</div>
+    </div>
+    {% elif used_space > 60 and used_space <=80 %}
+        <div class="progress-bar bg-warning" role="progressbar" style="width: {{used_space}}%;" aria-valuenow="{{used_space}}" aria-valuemin="0" aria-valuemax="100">{{used_space}}%</div>
+    </div>
+        <a href="#">Limpar cloud</a>
+    {% elif used_space > 80 %}
+        <div class="progress-bar bg-danger" role="progressbar" style="width: {{used_space}}%;" aria-valuenow="{{used_space}}" aria-valuemin="0" aria-valuemax="100">{{used_space}}%</div>
+    </div>
+        <a href="#">Limpar cloud</a>
+    {%endif%}
+  
+
+
 <a href="{{ url_for('profilePage.deleteAccount', id=client.id) }}"><button type="button">Apagar conta</button></a>
 
 {% endblock %}

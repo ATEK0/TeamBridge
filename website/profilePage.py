@@ -30,11 +30,11 @@ def get_dir_size(path):
 def profile():
     user = User.query.get(current_user.id)
     if request.method == "POST":
-        ...
+        return "Dados serao mudados :)"
     path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}'
     pathsize = get_dir_size(path)
     # 100000000 100mb
-    pathsize = (pathsize * 100) / 100000000
+    pathsize = (pathsize * 100) / 1000000000
     return render_template('profile.html', client=current_user, used_space=pathsize)
         
 
@@ -59,3 +59,4 @@ def deleteAccount(id):
     logout_user()
     
     return redirect(url_for("auth.login"))
+

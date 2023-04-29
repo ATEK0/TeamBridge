@@ -39,7 +39,7 @@ def home():
             db.session.commit()
             flash("Note added", category="success")
         else:
-            flash("You need to insert something to create a note", category="error")
+            flash("You need to insert something to create a note", category="danger")
     
     return render_template("home.html", client=current_user)
 
@@ -53,6 +53,6 @@ def deleteNote():
             db.session.delete(note)
             db.session.commit()
         else:
-            flash("Something went wrong", category="error")
+            flash("Something went wrong", category="danger")
         
     return jsonify({})
