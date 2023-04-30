@@ -46,6 +46,7 @@ def admin():
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
+    remember = False #remember user if check is checked
     if current_user.is_authenticated:
         return redirect(url_for("views.profile"))
     else:
@@ -56,7 +57,9 @@ def register():
             pssw1 = request.form.get("pssw1")
             pssw1 = request.form.get("pssw1")
             profile = request.files["profile_pic"]
-            print(profile)
+            checkbox_value = request.form['remember-me']
+            if checkbox_value == 'on':
+                remember = True #remember user if check is checked
             user = User.query.filter_by(email = email).first()
             
             if user:
@@ -83,7 +86,7 @@ def register():
                 
                 db.session.commit()
                 
-                login_user(new_user, remember=True)
+                login_user(new_user, remember=remember) #remember user if check is checked
                 os.mkdir(f'./files/{current_user.id}')
                 flash("Conta criada com sucesso", category="success")
                 return redirect(url_for("views.home"))
