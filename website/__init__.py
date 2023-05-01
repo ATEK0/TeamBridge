@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, render_template
+from flask_login import current_user
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 
@@ -24,6 +25,12 @@ def create_app():
     app.register_blueprint(auth, url_prefix="/")
     app.register_blueprint(profilePage, url_prefix="/")
     app.register_blueprint(fileExplorer, url_prefix="/")
+
+    
+    @app.errorhandler(404)
+    def not_found_error(error):
+        return render_template('error.html', client=current_user, error=True), 404
+    
     
     from .models import User, Note, Files #ou entao posso usar import .models as models, especifiquei  nome pq n pode ter um . no inicio
     
@@ -33,11 +40,15 @@ def create_app():
     login_manager.login_view = "auth.login"
     login_manager.init_app(app)
     
+    
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
     
     return app
+
+    
+
 
 def create_database(app):
     if not path.exists("website/" + DB_NAME):

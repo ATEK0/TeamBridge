@@ -17,9 +17,7 @@ class User(db.Model, UserMixin):
     profile_pic = db.Column(db.String(300), default='./static/default images/user.png')
     notes = db.relationship('Note')
     files = db.relationship("Files")
-    
-    def set_image_path(self):
-        self.profile_pic = f'./static/default images/user{self.id}'
+
     
 class Files(db.Model):
     id = db.Column(db.Integer, primary_key=True)
