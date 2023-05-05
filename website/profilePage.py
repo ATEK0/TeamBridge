@@ -1,9 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, url_for, send_file, redirect
 from flask_login import login_required, current_user, logout_user
 
-from unidecode import unidecode
-
-from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 
 import os, shutil
 
@@ -35,7 +33,64 @@ def profile():
     pathsize = get_dir_size(path)
     # 100000000 100mb
     pathsize = (pathsize * 100) / 1000000000
-    return render_template('profile.html', client=current_user, used_space=pathsize)
+    return render_template('profile.html', client=current_user, used_space=pathsize, page='profile')
+        
+        
+@profilePage.route('/change-password', methods=["POST"])
+@login_required
+def change_password():
+    if request.method=="POST":
+        password = request.form.get('password')
+        newPassword = request.form.get('newpassword')
+        newPasswordConfirm = request.form.get('renewpassword')
+        
+        print(password, newPassword, newPasswordConfirm)
+        
+        user = User.query.get(current_user.id)
+        
+        if check_password_hash(user.password, password):
+            if newPassword == newPasswordConfirm:
+                user.password = generate_password_hash(newPassword)
+                db.session.commit()
+                flash("Password changed", "success")
+            else:
+                flash("Passwords don't match", "warning")
+        else:
+            flash("Incorrect Password", "warning")
+        
+            
+    return redirect(url_for('profilePage.profile'))
+                
+
+@profilePage.route('/update-image', methods=["POST"])
+@login_required
+def update_photo():
+
+    profile = request.files["profile_pic"]
+    info = request.form.get('info')
+    
+    user = User.query.get(current_user.id)
+    
+    if info == 'upload':
+        if profile:
+            file_type = profile.content_type.split('/')[1]
+            user.profile_pic = url_for('static', filename = f'profiles/{user.id}.{file_type}')
+            path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\static\profiles\{user.id}.{file_type}'
+            profile.save(path)
+            flash("Photo changed successefully", "success")
+        else:
+            flash("File can't be empty")
+    elif info == 'delete':
+        if user.profile_pic == url_for('static', filename = f'default images/user.png'):
+            flash("You can't delete a photo that dont exists")
+        else:
+            user.profile_pic = url_for('static', filename = f'default images/user.png')
+            path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\static\profiles\{user.id}.{file_type}'  
+            os.remove(path)
+    
+    db.session.commit()
+            
+    return redirect(url_for('profilePage.profile'))               
         
 
 @profilePage.route('/profile/deleteAccount/<path:id>', methods=["GET", "POST"])

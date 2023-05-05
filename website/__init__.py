@@ -20,11 +20,13 @@ def create_app():
     from .fileExplorer import fileExplorer
     from .auth import auth
     from .profilePage import profilePage
+    from .dashboard import dashboard
     
     app.register_blueprint(views, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
     app.register_blueprint(profilePage, url_prefix="/")
     app.register_blueprint(fileExplorer, url_prefix="/")
+    app.register_blueprint(dashboard, url_prefix="/")
 
     
     @app.errorhandler(404)

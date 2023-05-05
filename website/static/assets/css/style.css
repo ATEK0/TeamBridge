@@ -49,8 +49,14 @@ h6 {
 
 @media (max-width: 1199px) {
   #main {
-    padding: 20px;
+    padding: 30px;
+    margin: 0px !important;
   }
+}
+
+
+.m-300 {
+  margin-left: 300px;
 }
 
 /*--------------------------------------------------------------
@@ -467,7 +473,7 @@ h6 {
 }
 
 .header-nav .nav-icon {
-  font-size: 16px;
+  font-size: 22px;
   color: #012970;
   margin-right: 25px;
   position: relative;
@@ -633,7 +639,7 @@ h6 {
 
   /* #main,
   #footer {
-    margin-left: 300px;
+    margin-left: 0px!important;
   } */
 }
 
@@ -644,11 +650,6 @@ h6 {
 }
 
 @media (min-width: 1200px) {
-
-  .toggle-sidebar #main,
-  .toggle-sidebar #footer {
-    margin-left: 0;
-  }
 
   .toggle-sidebar .sidebar {
     left: -300px;
@@ -684,9 +685,8 @@ h6 {
   align-items: center;
   font-size: 15px;
   font-weight: 600;
-  color: #4154f1;
+  color:#012970;
   transition: 0.3;
-  background: #f6f9ff;
   padding: 10px 15px;
   border-radius: 4px;
 }
@@ -694,7 +694,12 @@ h6 {
 .sidebar-nav .nav-link i {
   font-size: 16px;
   margin-right: 10px;
-  color: #4154f1;
+  color: #899bbd !important;
+}
+
+.selected, .selected i {
+  color: #4154f1 !important;
+  background-color: #f6f9ff !important;
 }
 
 .sidebar-nav .nav-link.collapsed {
@@ -1230,4 +1235,9 @@ h6 {
   text-align: center;
   font-size: 13px;
   color: #012970;
+}
+
+
+.text-muted {
+  font-size: 12px;
 }

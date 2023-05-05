@@ -11,9 +11,17 @@ class Note(db.Model):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True) 
-    email = db.Column(db.String(150), unique=True) 
+    
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
+    description = db.Column(db.String(500), default="Not defined")
+    job = db.Column(db.String(150))
+    country = db.Column(db.String(100), default="Not defined")
+    birthday = db.Column(db.Date, nullable=True)
+    
+    email = db.Column(db.String(150), unique=True)
+    username = db.Column(db.String(30))
     password = db.Column(db.String(50))
-    first_name = db.Column(db.String(150))
     profile_pic = db.Column(db.String(300), default='./static/default images/user.png')
     notes = db.relationship('Note')
     files = db.relationship("Files")

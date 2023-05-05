@@ -1,0 +1,97 @@
+{%extends "base.html"%}
+{% block title %}Register{% endblock%}
+
+{% block content %}
+
+
+<form class="mt-5" method="POST" enctype="multipart/form-data">
+    <div class="container">
+      <section class="section register d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+              <div class="card mb-3">
+
+                <div class="card-body">
+
+                  <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Hi {{client.first_name}}</h5>
+                    <p class="text-center small">Enter your personal information to be better known by your company</p>
+                  </div>
+
+                    <div class="col-12 mx-auto mt-1">
+                        <label for="yourName" class="form-label">Biography</label>
+                        <textarea class="form-control" name="bio" placeholder="Here should be your bio...why is not?" id="bio" style="height: 100px;"></textarea>
+                    </div>
+
+
+                    <div class="col-12 mx-auto mt-1">
+                      <label for="yourName" class="form-label">Birth day</label>
+                      <input type="date" id="birth" name="birth" class="form-control" required>
+                  </div>
+                    
+
+                    <div class="col-12 mx-auto mt-1">
+                        <label for="yourName" class="form-label">Job</label>
+                        <input type="text" name="job" class="form-control" id="job" required>
+                        <div class="invalid-feedback">Please, enter your position</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="country" class="form-label">Country</label>
+                        <select class="form-select" name='country' aria-label="Default select example">
+                          <option selected>Open this select menu</option>
+                          {% for country in countrys %}
+                          <option value="{{country.code}}">{{country.name}}</option>
+                          {% endfor %}
+                        </select>
+                      <div class="invalid-feedback" id="invalid-country">Please select a valid country!</div>
+                    </div>
+                    
+
+                    <div class="col-12 mt-1">
+                      <label for="yourUsername" class="form-label">Username</label>
+                      <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                        <input type="text" name="username" class="form-control" id="yourUsername" required>
+                        <div class="invalid-feedback" id="invalid-username">Please choose a username.</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 mt-4" style="display:flex;justify-content:center;align-items:center;">
+                      <button class="btn btn-primary w-100" type="submit">Continue</button>
+                    </div>
+
+
+
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+</form><!-- End #main -->
+
+
+<!--<h3 align="center">Register</h3>
+    <div class="form-group">
+        <label for="email">Email Address:</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email"> 
+        <label for="firstName">First Name:</label>
+        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name"> 
+        <label for="pssw">Password:</label>
+        <input type="password" class="form-control" id="pssw" name="pssw" placeholder="Enter Password"> 
+        <label for="pssw1">Confirm Password:</label>
+        <input type="password" class="form-control" id="pssw1" name="pssw1" placeholder="Enter Password Confirmation"> 
+        <label for="profile_pic">Profile Pic</label>
+        <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept="image/png, image/jpeg, image/jpg" maxlength="5000000">
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary">Submit</button>-->
+
+{%endblock%}
