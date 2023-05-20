@@ -32,12 +32,64 @@ function toggleSidebar() {
   if (finder == 0) {
     $("#body").addClass('toggle-sidebar');
     $("#main").removeClass('m-300');
-
   } else {
   $("#body").removeClass('toggle-sidebar');
   $("#main").addClass('m-300');
   }
 }
+
+
+//change register form show
+
+function changeRegisterForm(form) {
+  if (form == "company") {
+    $(".register-chose-c").addClass("move-left");
+    $(".register-user-c").addClass("register-apear")
+  } else if (form == "reverse"){
+    $(".register-chose-c").removeClass("move-left");
+    $(".register-chose-c").removeClass("move-right");
+    $(".register-user-c").removeClass("register-apear")
+    $(".register-company-c").attr('style','left: -100%')
+
+  } else {
+    $(".register-chose-c").addClass("move-right");
+    $(".register-company-c").attr('style','left: 50%')
+  }
+}
+
+
+
+//check register things
+function registerHandler() {
+  $("#email").val();
+  fetch('/register', {
+  method: 'POST',
+  body: JSON.stringify({
+    title:name,
+    body:body,
+
+  }),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8',
+  }
+  })
+  .then(function(response){ 
+  return response.json()})
+  .then(function(data)
+  {console.log(data)
+  title=document.getElementById("title")
+  body=document.getElementById("bd")
+  title.innerHTML = data.title
+  body.innerHTML = data.body  
+}).catch(error => console.error('Error:', error)); 
+
+}
+
+
+
+
+
+
 
 
 // this is a countdown that allows people to reread infos before deleting its account

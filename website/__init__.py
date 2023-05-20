@@ -3,7 +3,10 @@ from flask_login import current_user
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 
+from werkzeug.security import generate_password_hash
+
 from flask_login import LoginManager
+
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -16,13 +19,15 @@ def create_app():
     # app.config['SERVER_NAME'] = "pigcenter"
     db.init_app(app)
     
-    from .views import views
+    from .home import home
+    from .administration import administration
     from .fileExplorer import fileExplorer
     from .auth import auth
     from .profilePage import profilePage
     from .dashboard import dashboard
     
-    app.register_blueprint(views, url_prefix="/")
+    app.register_blueprint(home, url_prefix="/")
+    app.register_blueprint(administration, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
     app.register_blueprint(profilePage, url_prefix="/")
     app.register_blueprint(fileExplorer, url_prefix="/")
@@ -34,9 +39,11 @@ def create_app():
         return render_template('error.html', client=current_user, error=True), 404
     
     
-    from .models import User, Note, Files #ou entao posso usar import .models as models, especifiquei  nome pq n pode ter um . no inicio
+    from .models import User #ou entao posso usar import .models as models, especifiquei  nome pq n pode ter um . no inicio
+
     
     create_database(app)
+      
     
     login_manager = LoginManager()
     login_manager.login_view = "auth.login"
@@ -56,4 +63,7 @@ def create_database(app):
     if not path.exists("website/" + DB_NAME):
         with app.app_context():
             db.create_all()
+            
         print("Database Created")
+        
+

@@ -5,16 +5,23 @@ import datetime
 
 import os
 
-from .models import User
+import random
+import string
+
+from .models import User, Company
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+
+def generate_random_invite():
+    characters = string.ascii_letters + string.digits
+    random_string = ''.join(random.choice(characters) for _ in range(10))
+    return random_string
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-
     remember = False
     if current_user.is_authenticated:
         return redirect(url_for("profilePage.profile"))
@@ -38,7 +45,7 @@ def login():
                     flash("Password errada", category="warning")
             else:
                 flash("Incorrect Username", category="warning")
-                     
+            
     return render_template("login.html", client=current_user)
 
 @auth.route('/logout')
@@ -46,10 +53,6 @@ def login():
 def logout():  
     logout_user()
     return redirect(url_for("auth.login"))
-
-@auth.route('/login/admin')
-def admin():  
-    return "Ta tudo no admin"
    
 
 
@@ -60,18 +63,18 @@ def register():
         return redirect(url_for("profilePage.profile"))
     else:
         if request.method == 'POST':
-            email = request.form.get("email")
+            email = request.get("email")
             fname = request.form.get("firstName")
             lname = request.form.get("lastName")
             
-
+            company = request.form.get("company")
             
             pssw = request.form.get("password")
             pssw1 = request.form.get("password1")
             profile = request.files["profile_pic"]
             checkbox_value = request.form.get('remember-me')
             
-            
+            checkEmail = User.query.filter_by(email = email).first()
             
             if checkbox_value == 'on':
                 rememberme = True #remember user if check is checked
@@ -84,6 +87,8 @@ def register():
                 flash("As passwords não coincidem", category="danger")
             elif len(pssw) < 7:
                 flash("Password deve ser pelo menos maior do que 6 caracteres", category="danger")
+            elif checkEmail:
+                flash("This email is already registered. Try login into your account", "danger")
             else:
                 new_user = User(email=email, first_name=fname, last_name=lname,password=generate_password_hash(pssw, method="sha256"))
                 
@@ -102,7 +107,7 @@ def register():
                 flash("Conta criada com sucesso", category="success")
                 return redirect(url_for("auth.register_data"))
                         
-    return render_template("register.html", client=current_user)
+    return render_template("register.html", client=current_user, company="something")
 
 
 @auth.route('/add-infos', methods=['GET','POST'])
@@ -140,23 +145,3 @@ def register_data():
             
         
     return render_template("register-personal.html", client = current_user)
-
-
-def crop_image(filepath):
-    with Image.open(filepath) as img:
-        width, height = img.size
-        min_dim = min(width, height)
-        left = (width - min_dim) / 2
-        top = (height - min_dim) / 2
-        right = (width + min_dim) / 2
-        bottom = (height + min_dim) / 2
-        cropped_img = img.crop((left, top, right, bottom))
-        cropped_img.save(filepath)
-
-
-
-    
-@auth.route('/register-company', methods=['POST'])
-def register_company():
-    if request.method == 'POST':
-        ...

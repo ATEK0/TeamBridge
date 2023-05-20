@@ -1215,6 +1215,61 @@ h6 {
   }
 }
 
+
+/*--------------------------------------------------------------
+# register
+--------------------------------------------------------------*/
+.register-chose-c {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: left 1s ease-in-out;
+}
+
+
+.register-user-c {
+  position: absolute;
+  top: 50%;
+  left: 150%;
+  transform: translate(-50%, -50%);
+  transition: left 1s ease-in-out;
+}
+
+
+.register-company-c {
+  position: absolute;
+  top: 50%;
+  left: -100%;
+  transform: translate(-50%, -50%);
+  transition: left 1s ease-in-out;
+}
+
+
+.move-left {
+  left: -100% !important;
+}
+
+.move-right {
+  left: 200% !important;
+}
+
+.register-apear {
+  left: 50% !important;
+}
+
+
+/*--------------------------------------------------------------
+# login form
+--------------------------------------------------------------*/
+.login-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
 /*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/

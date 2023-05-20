@@ -5,14 +5,14 @@ from unidecode import unidecode
 
 from werkzeug.utils import secure_filename
 
-import os, shutil
+import os
 
 import json
 from . import db
 
 from .models import Note, User, Files
 
-views = Blueprint('views', __name__)
+home = Blueprint('home', __name__)
 
 def get_dir_size(path):
     total = 0
@@ -25,7 +25,7 @@ def get_dir_size(path):
     return total
 
 
-@views.route('/', methods=["GET", "POST"])
-def home():    
-    return "ta tudo bem"
+@home.route('/', methods=["GET", "POST"])
+def homePage():
+    return render_template("index.html", client=current_user)
 
