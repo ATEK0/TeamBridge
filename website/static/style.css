@@ -48,4 +48,29 @@ to {
   border-color: #c6e6f1;
 }
 
+.pretty-link {
+  display: flex;
+  text-decoration: none;
+  color: #4897e7;
+  font-weight: bold;
+  transition: 1s all;
+  transform: translateX(-30px);
+}
+
+.pretty-link:hover {
+  text-decoration: none;
+  color: #48b3f0;
+  transform: translateX(10px);
+}
+
+.pretty-img {
+  width: 30px;
+  opacity: 0;
+  transition: 1s all;
+}
+
+.pretty-link:hover > .pretty-img {
+  opacity: 1;
+
+}
 

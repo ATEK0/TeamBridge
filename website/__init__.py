@@ -17,6 +17,9 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{DB_NAME}'
     app.config['UPLOAD_FOLDER'] = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files'
     # app.config['SERVER_NAME'] = "pigcenter"
+    
+    app.config['UPLOAD_FOLDER'] = './profiles'
+    
     db.init_app(app)
     
     from .home import home

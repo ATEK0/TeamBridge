@@ -3,31 +3,97 @@
 
 {% block content %}
 
-<form method="POST" action="/file-explorer" enctype="multipart/form-data">
-    <h3 align="center">Gestor de ficheiros</h3>
-    <div class="form-group">
-        <input type="file" class="form-control" id="file" name="file">
-    </div>
-    <br>
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
 
 
+<main id="main" class="main">
+    <section class="section">
+        <form method="POST" action="/file-explorer" enctype="multipart/form-data">
+            <h3 align="center"><b>Your Files</b></h3>
+            <div class="form-group">
+                <input type="file" class="form-control" id="file" name="file">
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary mb-3">Upload</button>
+        </form>
+      <div class="row">
+            <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">@{{client.username}} files</h5>
 
-{% if client.files %}
+              <!-- List group With Checkboxes and radios -->
+              <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col d-flex align-self-center">
+                            <input class="form-check-input me-3" style="visibility:hidden;" type="checkbox" value="" aria-label="...">
+                            ID
+                        </div>
+                        <div class="col d-flex align-self-center">
+                            Name        
+                        </div>
+                        <div class="col d-flex align-self-center">
+                            Upload Date
+                        </div>
+                        <div class="col d-flex align-self-center">
+                            Size (mb)
+                        </div>
+                        <div class="col d-flex align-self-center">
+                            Owner
+                        </div>
+                        <div class="col d-flex justify-content-end align-center" style="end: 0">
+                            <a ><button type="button" class="btn btn-warning me-2" style="visibility:hidden;" ><i class="bi bi-download"></i></button></a>
+                            <a ><button type="button" class="btn btn-danger"  style="visibility:hidden;"><i class="bi bi-trash"></i></button></a>
+                        </div>
+                    </div>
+                </li>
+                {% if client.files %}
 
-    {% for file in client.files %}
-        <div style="display: flex;margin:10px;background-color:whitesmoke;padding:10px;">
-            <p style="padding:5px">{{ file.id }}</p>
-            <p style="padding:5px">{{ file.filename }}</p>
-            <p style="padding:5px">{{ file.uploadDate }}</p>
-            <a href="{{ url_for('fileExplorer.download', fileId=file.id) }}"><button type="button" class="btn btn-warning">Download</button></a><a href="{{ url_for('fileExplorer.deleteFile', fileId=file.id) }}"><button type="button" class="btn btn-danger">Delete</button></a>
+                    {% for file in client.files %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col d-flex align-self-center">
+                                    <input class="form-check-input me-3" type="checkbox" value="" aria-label="...">
+                                    {{ file.id }}
+                                </div>
+                                <div class="col d-flex align-self-center pe-0" style="max-width: fill-available;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                    {{ file.filename }}      
+                                </div>
+                                <div class="col d-flex align-self-center">
+                                    {{ file.upload_date }}
+                                </div>
+                                <div class="col d-flex align-self-center">
+                                    {{ file.size }}
+                                </div>
+                                <div class="col d-flex align-self-center">
+                                    <a href="/profile/{{ file.username }}" class="pretty-link"><img class="pretty-img" src="{{file.user_image}}"><span class="d-flex align-self-center ms-1">{{ file.username }}</span></a>
+                                </div>
+                                <div class="col d-flex justify-content-end align-center" style="end: 0">
+                                    <a href="{{ url_for('fileExplorer.download', fileId=file.id) }}"><button type="button" class="btn btn-secondary me-2"><i class="bi bi-download"></i></button></a>
+                                    <a href="{{ url_for('fileExplorer.deleteFile', fileId=file.id) }}"><button type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button></a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor%}
+            
+                {% else %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col d-flex align-self-center">
+                            You have no files, why not start uploading some? 🤩
+                        </div>
+                    </div>
+                </li>
+                {% endif %}
+
+              </ul><!-- End List Checkboxes and radios -->
+            </div>
         </div>
-    {% endfor%}
+      </div>
+    </section>
 
-{% else %}
-    <p>Parece que você não tem ficheiros</p>
-{% endif %}
+  </main><!-- End #main -->
+
+
 
 
 {% endblock %}

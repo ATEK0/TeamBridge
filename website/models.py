@@ -47,7 +47,10 @@ class Files(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     upload_date = db.Column(db.DateTime(timezone=True), default=func.now())
     filename = db.Column(db.String(300))
+    size = db.Column(db.String(20))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    username = db.Column(db.String(30))
+    user_image = db.Column(db.String(300), default='./static/default images/user.png')
     user = db.relationship('User')
 
 class Company(db.Model):

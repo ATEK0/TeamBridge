@@ -60,34 +60,162 @@ function changeRegisterForm(form) {
 
 
 //check register things
-function registerHandler() {
-  $("#email").val();
+function registerHandler(type) {
+
+  const data = {
+    type: "checking",
+    email: $("#yourEmail").val(),
+    fname: $("#firstName").val(),
+    lname: $("#lastName").val(),
+    password: $("#yourPassword").val()
+  };
+  
   fetch('/register', {
-  method: 'POST',
-  body: JSON.stringify({
-    title:name,
-    body:body,
-
-  }),
-  headers: {
-    'Content-type': 'application/json; charset=UTF-8',
-  }
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
   })
-  .then(function(response){ 
-  return response.json()})
-  .then(function(data)
-  {console.log(data)
-  title=document.getElementById("title")
-  body=document.getElementById("bd")
-  title.innerHTML = data.title
-  body.innerHTML = data.body  
-}).catch(error => console.error('Error:', error)); 
+    .then(response => response.json())
+    .then(result => {
+      // Process the response
+      console.log(result);
+      if (result["message"] === 'OK'){
+        if ($("#yourEmail").val().length < 3) {
+          showToast('danger', "Your email must be bigger than 3 characters");
+        } else if ($("#firstName").val().length <= 1) {
+          showToast('danger', "Your name must be bigger than 1 character");
+        } else if ($("#lastName").val().length <= 1) {
+          showToast('danger', "Your name must be bigger than 1 character");
+        } else if ($("#yourPassword").val() != $("#yourPassword2").val()) {
+          showToast('danger', "Passwords don't match!");
+        } else {
+          document.getElementById("register-user").submit();
+        }
+      } else {
+        showToast('danger', result["message"]);
+      }
+    })
+    .catch(error => {
+      // Handle any errors that occur during the request
+      console.error('Error:', error);
+    });
+  
+}
 
+function addInfosHandler(type) {
+  
+  var birth = document.getElementById("birth").value;
+  
+  const data = {
+    type: "checking",
+    username: $("#yourUsername").val()
+  };
+  
+  fetch('/add-infos', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(result => {
+      // Process the response
+      console.log(result);
+      if (result["message"] === 'OK'){
+        if (birth === '' || birth === null) {
+          const field = document.getElementById('birth');
+          field.setCustomValidity('Please fill this field');
+          field.reportValidity();
+        } else {
+          document.getElementById("add-infos-user").submit();
+        }
+      } else {
+        showToast('danger', result["message"]);
+      }
+    })
+    .catch(error => {
+      // Handle any errors that occur during the request
+      console.error('Error:', error);
+    });
+  
 }
 
 
+const showToast = (category, message) => {
+  const toastContainer = document.createElement('div');
+  toastContainer.setAttribute('aria-live', 'polite');
+  toastContainer.setAttribute('aria-atomic', 'true');
+  toastContainer.style.position = 'relative';
+  toastContainer.style.zIndex = '2000';
 
+  const toastElement = document.createElement('div');
+  toastElement.classList.add('toast');
+  toastElement.classList.add(`toast-${category}`);
+  toastElement.classList.add('position-fixed');
+  toastElement.classList.add('mt-3')
 
+  toastElement.style.marginRight = '20px';
+  toastElement.style.minWidth = '400px !important';
+  toastElement.style.top = '40px';
+  toastElement.style.right = '0';
+  toastElement.setAttribute('data-delay', '7000');
+  toastElement.setAttribute('data-bs-autohide', 'true');
+
+  const toastHeader = document.createElement('div');
+  toastHeader.classList.add('toast-header');
+  toastHeader.classList.add(`toast-${category}`);
+
+  const strongElement = document.createElement('strong');
+  if (category === 'danger') {
+    strongElement.classList.add('me-auto');
+    strongElement.classList.add('text-danger');
+    strongElement.innerHTML = '<i class="bi bi-exclamation-octagon-fill"></i> ERROR';
+  } else if (category === 'success') {
+    strongElement.classList.add('me-auto');
+    strongElement.classList.add('text-success');
+    strongElement.innerHTML = '<i class="bi bi-check-lg"></i> SUCCESS';
+  } else if (category === 'warning') {
+    strongElement.classList.add('me-auto');
+    strongElement.classList.add('text-warning');
+    strongElement.innerHTML = '<i class="bi bi-exclamation-circle-fill"></i> WARNING';
+  } else if (category === 'info') {
+    strongElement.classList.add('me-auto');
+    strongElement.classList.add('text-info');
+    strongElement.innerHTML = '<i class="bi bi-exclamation-circle-fill"></i> INFO';
+  }
+
+  const smallElement = document.createElement('small');
+  smallElement.textContent = 'right now';
+
+  const closeButton = document.createElement('button');
+  closeButton.type = 'button';
+  closeButton.classList.add('ml-2');
+  closeButton.classList.add('mb-1');
+  closeButton.classList.add('btn-close');
+  closeButton.setAttribute('data-bs-dismiss', 'toast');
+  closeButton.setAttribute('aria-label', 'Close');
+
+  const toastBody = document.createElement('div');
+  toastBody.classList.add('toast-body');
+  toastBody.textContent = message;
+
+  toastHeader.appendChild(strongElement);
+  toastHeader.appendChild(smallElement);
+  toastHeader.appendChild(closeButton);
+
+  toastElement.appendChild(toastHeader);
+  toastElement.appendChild(toastBody);
+
+  toastContainer.appendChild(toastElement);
+
+  document.body.appendChild(toastContainer);
+
+  const toast = new bootstrap.Toast(toastElement);
+  toast.show();
+};
 
 
 

@@ -4,7 +4,7 @@
 {% block content %}
 
 
-<form class="mt-5" method="POST" enctype="multipart/form-data">
+<form class="mt-5" method="POST" id="add-infos-user" enctype="multipart/form-data">
     <div class="container">
       <section class="section register d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
@@ -27,7 +27,7 @@
 
 
                     <div class="col-12 mx-auto mt-1">
-                      <label for="yourName" class="form-label">Birth day</label>
+                      <label for="yourName" class="form-label">Birthdate</label>
                       <input type="date" id="birth" name="birth" class="form-control" required>
                   </div>
                     
@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="col-12 mt-4" style="display:flex;justify-content:center;align-items:center;">
-                      <button class="btn btn-primary w-100" type="submit">Continue</button>
+                      <button class="btn btn-primary w-100" type="button" onClick="addInfosHandler('checking')">Finish Registration</button>
                     </div>
 
 

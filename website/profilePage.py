@@ -66,30 +66,35 @@ def change_password():
 @login_required
 def update_photo():
 
-    profile = request.files["profile_pic"]
-    info = request.form.get('info')
-    
-    user = User.query.get(current_user.id)
-    
-    if info == 'upload':
-        if profile:
-            file_type = profile.content_type.split('/')[1]
-            user.profile_pic = url_for('static', filename = f'profiles/{user.id}.{file_type}')
-            path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\static\profiles\{user.id}.{file_type}'
-            profile.save(path)
-            flash("Photo changed successefully", "success")
-        else:
-            flash("File can't be empty")
-    elif info == 'delete':
-        if user.profile_pic == url_for('static', filename = f'default images/user.png'):
-            flash("You can't delete a photo that dont exists")
-        else:
-            user.profile_pic = url_for('static', filename = f'default images/user.png')
-            path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\static\profiles\{user.id}.{file_type}'  
-            os.remove(path)
-    
-    db.session.commit()
-            
+    if request.method == 'POST':
+        profile = request.files["profile_pic"]
+        info = request.form.get('info')
+        
+        user = User.query.get(current_user.id)
+        print(info)
+        
+        # if info == 'upload':
+        #     if profile:
+        #         print("uploadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        #         file_type = profile.content_type.split('/')[1]
+        #         path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\profiles\{user.id}.{file_type}'  
+        #         profile.save(path)
+        #         user.profile_pic = path
+                
+                
+        #         flash("Photo changed successefully", "success")
+        #         db.session.commit()
+                
+        #     else:
+        #         flash("File can't be empty")
+        # elif info == 'delete':
+        #     if user.profile_pic == url_for('static', filename = f'default images/user.png'):
+        #         flash("You can't delete a photo that dont exists")
+        #     else:
+        #         user.profile_pic = url_for('static', filename = f'default images/user.png')
+        #         path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\profiles\{user.id}.{file_type}'  
+        #         os.remove(path)
+
     return redirect(url_for('profilePage.profile'))               
         
 

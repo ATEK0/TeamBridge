@@ -59,53 +59,64 @@ def logout():
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     remember = False #remember user if check is checked
+    
     if current_user.is_authenticated:
         return redirect(url_for("profilePage.profile"))
     else:
         if request.method == 'POST':
-            email = request.get("email")
-            fname = request.form.get("firstName")
-            lname = request.form.get("lastName")
-            
-            company = request.form.get("company")
-            
-            pssw = request.form.get("password")
-            pssw1 = request.form.get("password1")
-            profile = request.files["profile_pic"]
-            checkbox_value = request.form.get('remember-me')
-            
-            checkEmail = User.query.filter_by(email = email).first()
-            
-            if checkbox_value == 'on':
-                rememberme = True #remember user if check is checked
-           
-            if len(email) < 4:
-                flash("O teu email é muito pequeno, deve ter mais do que 3 letras", category="danger")
-            elif len(fname) < 2:
-                flash("O teu nome deve ser maior do que 1 caracter", category="danger")
-            elif pssw != pssw1:
-                flash("As passwords não coincidem", category="danger")
-            elif len(pssw) < 7:
-                flash("Password deve ser pelo menos maior do que 6 caracteres", category="danger")
-            elif checkEmail:
-                flash("This email is already registered. Try login into your account", "danger")
-            else:
-                new_user = User(email=email, first_name=fname, last_name=lname,password=generate_password_hash(pssw, method="sha256"))
+            try:
+                data = request.json
+                if data["type"] == 'checking':
+                    email = data["email"]
+                    
+                    checkEmail = User.query.filter_by(email = email).first()
+                    
+                    if checkEmail:
+                        result = {'message': 'Email already in use. Try login into your account'}
+                        return jsonify(result)
+                    else:
+                        result = {'message': 'OK'}
+                        return jsonify(result)
+            except Exception as e:
                 
-                db.session.add(new_user)
-                db.session.commit()
-                if profile:
-                    file_type = profile.content_type.split('/')[1]
-                    new_user.profile_pic = url_for('static', filename = f'profiles/{new_user.id}.{file_type}')
-                    path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\static\profiles\{new_user.id}.{file_type}'
-                    profile.save(path)
+                email = request.form.get("email")
+                fname = request.form.get("firstName")
+                lname = request.form.get("lastName")
                 
-                db.session.commit()
+                pssw = request.form.get("password")
+                pssw1 = request.form.get("password1")
+                profile = request.files["profile_pic"]
+                checkbox_value = request.form.get('remember-me')
                 
-                login_user(new_user, remember=True) #remember user if check is checked
-                os.mkdir(f'C:\\ISTEC\\PROJETO FINAL\\TESTES\\webserver\\files\\{new_user.id}')
-                flash("Conta criada com sucesso", category="success")
-                return redirect(url_for("auth.register_data"))
+                
+                if checkbox_value == 'on':
+                    rememberme = True #remember user if check is checked
+            
+                if len(email) < 4:
+                    flash("O teu email é muito pequeno, deve ter mais do que 3 letras", category="danger")
+                elif len(fname) < 2:
+                    flash("O teu nome deve ser maior do que 1 caracter", category="danger")
+                elif pssw != pssw1:
+                    flash("As passwords não coincidem", category="danger")
+                elif len(pssw) < 7:
+                    flash("Password deve ser pelo menos maior do que 6 caracteres", category="danger")
+                else:
+                    new_user = User(email=email, first_name=fname, last_name=lname,password=generate_password_hash(pssw, method="sha256"))
+                    
+                    db.session.add(new_user)
+                    db.session.commit()
+                    if profile:
+                        file_type = profile.content_type.split('/')[1]
+                        new_user.profile_pic = url_for('profiles', filename = f'{new_user.id}.{file_type}')
+                        path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\profiles\{new_user.id}.{file_type}'
+                        profile.save(path)
+                    
+                    db.session.commit()
+                    
+                    login_user(new_user, remember=True) #remember user if check is checked
+                    os.mkdir(f'C:\\ISTEC\\PROJETO FINAL\\TESTES\\webserver\\files\\{new_user.id}')
+                    flash("Conta criada com sucesso", category="success")
+                    return redirect(url_for("auth.register_data"))
                         
     return render_template("register.html", client=current_user, company="something")
 
@@ -114,34 +125,54 @@ def register():
 @login_required
 def register_data():
     user = User.query.get(current_user.id)
-    if user.description and user.job:
+    
+    if user.description and user.job and user.username:
         return redirect(url_for('profilePage.profile'))
     else:
         if request.method == 'POST':
-            bio = request.form.get("bio")
-            birthday = request.form.get("birth")
-            job = request.form.get("job")
-            country = request.form.get("country")
-            username = request.form.get("username")
-            
-            y, m, d = birthday.split('-')
-            expiration_date = datetime.datetime(int(y), int(m), int(d))
-            
-            user = User.query.get(current_user.id)
-            check_username = User.query.get(username)
-            
-            if check_username:
-                flash("That username is already taken!")  
-            else:
-                user.description = bio
-                user.job = job
-                user.username = username
-                user.country = country
-                user.birthday = expiration_date
-
-                db.session.commit()
+            print("check 1")
+            try:
+                data = request.json
+                if data["type"] == 'checking':
+                    username = data["username"]
+                    
+                    checkUsername = User.query.filter_by(username = username).first()
+                    print("check 2")
+                    if checkUsername or username == "":
+                        print("username ja existe")
+                        result = {'message': 'Username already exists, try another one'}
+                        return jsonify(result)
+                    else:
+                        print("está ok")
+                        result = {'message': 'OK'}
+                        return jsonify(result)
+                    
+            except Exception as e:
                 
-                return redirect(url_for('profilePage.profile'))
+                bio = request.form.get("bio")
+                birthday = request.form.get("birth")
+                job = request.form.get("job")
+                country = request.form.get("country")
+                username = request.form.get("username")
+                
+                y, m, d = birthday.split('-')
+                expiration_date = datetime.datetime(int(y), int(m), int(d))
+                
+                user = User.query.get(current_user.id)
+                check_username = User.query.get(username)
+                
+                if check_username:
+                    flash("That username is already taken!")  
+                else:
+                    user.description = bio
+                    user.job = job
+                    user.username = username
+                    user.country = country
+                    user.birthday = expiration_date
+
+                    db.session.commit()
+                    
+                    return redirect(url_for('profilePage.profile'))
             
         
     return render_template("register-personal.html", client = current_user)

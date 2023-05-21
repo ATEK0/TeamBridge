@@ -38,6 +38,7 @@
   </div>
 </form><!-- End #main -->
 
+<div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1000;"></div>
 
 
 <form class="mt-5" method="POST"  id="register-user" enctype="multipart/form-data">
@@ -59,13 +60,13 @@
                   <div class="d-inline-flex"> 
                     <div class="col-6 mx-auto" style="width: 49%;">
                       <label for="firstName" class="form-label">First Name</label>
-                      <input type="text" name="firstName" class="form-control" id="firstName" required>
+                      <input type="text" name="firstName" class="form-control" id="firstName" minlenght="2" required>
                       <div class="invalid-feedback" id="invalid-name">Please enter your first name!</div>
                     </div>
                   
                     <div class="col-6 mx-auto" style="width: 49%;">
                       <label for="lastName" class="form-label text-end" style="text-align: right;">Last Name</label>
-                      <input type="text" name="lastName" class="form-control" id="lastName" required>
+                      <input type="text" name="lastName" class="form-control" id="lastName" minlenght="2" required>
                       <div class="invalid-feedback">Please enter your last name!</div>
                     </div>
                   </div>
@@ -73,7 +74,7 @@
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Your Email</label>
-                      <input type="email" name="email" class="form-control" id="yourEmail" required>
+                      <input type="email" name="email" class="form-control" id="yourEmail" minlenght="4" required>
                       <div class="invalid-feedback" id="invalid-email" >Please enter a valid Email adddress!</div>
                     </div>
 
@@ -86,7 +87,7 @@
 
                     <div class="col-12">
                         <label for="yourPassword" class="form-label">Confirm Password</label>
-                        <input type="password" name="password1" class="form-control" minlength="7" id="yourPassword" required>
+                        <input type="password" name="password1" class="form-control" minlength="7" id="yourPassword2" required>
                         <div class="invalid-feedback" id="invalid-password">Please confirm your password!</div>
                     </div>
                     

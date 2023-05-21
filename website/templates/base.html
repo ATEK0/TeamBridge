@@ -47,6 +47,16 @@
 
     <title>{% block title %}Home{% endblock %}</title>
   </head>
+
+  {% if client.is_authenticated and not client.username %} 
+    <script> 
+      const currentPath = window.location.pathname;
+      if (currentPath != "/add-infos") {
+        window.location.href="/add-infos"
+      }
+    </script> 
+  {% endif %}
+
   <body id="body" class="toggle-sidebar">
    
   <!--  ======= Header ======= -->
@@ -296,7 +306,7 @@
         </a>
         <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
           <li>
-            <a href="components-alerts.html">
+            <a href="/file-explorer">
               <i class="bi bi-circle"></i><span>My Files</span>
             </a>
           </li>
@@ -384,7 +394,7 @@
       {% if messages %}
         {% for category, message in messages %}
         <div aria-live="polite" aria-atomic="true" style="position: relative;z-index:2000;">
-          <div class="toast toast-{{category}} mt-3 position-fixed" style="margin-right:20px;min-width:400px !important;top: 0; right: 0;" data-delay="7000" data-bs-autohide="true">
+          <div class="toast toast-{{category}} mt-3 position-fixed" style="margin-right:20px;min-width:400px !important;right: 0;" data-delay="7000" data-bs-autohide="true">
             <div class="toast-header toast-{{category}}">
               {% if category == 'danger' %}
               <strong class="me-auto text-{{category}}"><i class="bi bi-exclamation-octagon-fill"></i> ERROR</strong>
