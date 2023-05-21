@@ -23,17 +23,24 @@ def get_dir_size(path):
     return total
 
 
-@profilePage.route('/profile', methods=["GET", "POST"])
+@profilePage.route('/profile/<path:username>', methods=["GET", "POST"])
 @login_required
-def profile():
-    user = User.query.get(current_user.id)
+def profile(username):
+
+    user = User.query.filter_by(username = username).first()
+
+    if not user:
+        return render_template('error.html', client=user, message="Profile not found")
+
     if request.method == "POST":
         return "Dados serao mudados :)"
+    
     path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}'
     pathsize = get_dir_size(path)
     # 100000000 100mb
     pathsize = (pathsize * 100) / 1000000000
-    return render_template('profile.html', client=current_user, used_space=pathsize, page='profile')
+    
+    return render_template('profile.html', client=user, profile = current_user.username, used_space=pathsize)
         
         
 @profilePage.route('/change-password', methods=["POST"])
@@ -67,35 +74,45 @@ def change_password():
 def update_photo():
 
     if request.method == 'POST':
-        profile = request.files["profile_pic"]
-        info = request.form.get('info')
-        
+        profile = request.files["profile_pic"]        
         user = User.query.get(current_user.id)
-        print(info)
-        
-        # if info == 'upload':
-        #     if profile:
-        #         print("uploadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-        #         file_type = profile.content_type.split('/')[1]
-        #         path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\profiles\{user.id}.{file_type}'  
-        #         profile.save(path)
-        #         user.profile_pic = path
-                
-                
-        #         flash("Photo changed successefully", "success")
-        #         db.session.commit()
-                
-        #     else:
-        #         flash("File can't be empty")
-        # elif info == 'delete':
-        #     if user.profile_pic == url_for('static', filename = f'default images/user.png'):
-        #         flash("You can't delete a photo that dont exists")
-        #     else:
-        #         user.profile_pic = url_for('static', filename = f'default images/user.png')
-        #         path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\profiles\{user.id}.{file_type}'  
-        #         os.remove(path)
+        if profile:
+            file_type = profile.content_type.split('/')[1]
+            path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\static\profiles\{user.id}.{file_type}'  
+            try:
+                if user.profile_pic != '/static/default images/user.png':
+                    os.remove(str(user.profile_pic))
+            except Exception as e:
+                print(e)
+            profile.save(path)
+            user.profile_pic = url_for('static', filename = f'profiles/{user.id}.{file_type}')
+            
+            flash("Photo changed successefully", "success")
+            db.session.commit()
+            
+        else:
+            flash("File can't be empty")
 
-    return redirect(url_for('profilePage.profile'))               
+    return redirect(url_for('profilePage.profile', username=current_user.username))          
+
+
+@profilePage.route('/delete-profile-image', methods=["POST"])
+@login_required
+def delete_photo():
+    if request.method == 'POST':
+                
+        user = User.query.get(current_user.id)
+        
+        if user.profile_pic == url_for('static', filename = f'default images/user.png'):
+            flash("You can't delete a photo that dont exists")
+        else:
+            path = "C:\ISTEC\PROJETO FINAL\TESTES\webserver\website" + user.profile_pic
+            os.remove(path)
+            user.profile_pic = url_for('static', filename = f'default images/user.png')
+
+            db.session.commit()
+
+    return redirect(url_for('profilePage.profile', username=current_user.username))         
         
 
 @profilePage.route('/profile/deleteAccount/<path:id>', methods=["GET", "POST"])

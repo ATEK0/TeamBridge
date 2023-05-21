@@ -40,20 +40,30 @@ function toggleSidebar() {
 
 
 //change register form show
-
 function changeRegisterForm(form) {
   if (form == "company") {
     $(".register-chose-c").addClass("move-left");
-    $(".register-user-c").addClass("register-apear")
+
+    $(".register-user-c").addClass("register-apear");
+
+    $(".register-user-c").addClass("show-reg");
+    setTimeout(() => {$(".register-user-c").css("display", "block"); }, 300);
+
+
   } else if (form == "reverse"){
     $(".register-chose-c").removeClass("move-left");
     $(".register-chose-c").removeClass("move-right");
+
+    $(".register-user-c").removeClass("show-reg");
+
+    setTimeout(() => {$(".register-user-c").css("display", "none"); }, 1000);
+
+
     $(".register-user-c").removeClass("register-apear")
-    $(".register-company-c").attr('style','left: -100%')
 
   } else {
     $(".register-chose-c").addClass("move-right");
-    $(".register-company-c").attr('style','left: 50%')
+
   }
 }
 
@@ -81,6 +91,8 @@ function registerHandler(type) {
     .then(result => {
       // Process the response
       console.log(result);
+      var password = $("#yourPassword").val()
+
       if (result["message"] === 'OK'){
         if ($("#yourEmail").val().length < 3) {
           showToast('danger', "Your email must be bigger than 3 characters");
@@ -90,6 +102,8 @@ function registerHandler(type) {
           showToast('danger', "Your name must be bigger than 1 character");
         } else if ($("#yourPassword").val() != $("#yourPassword2").val()) {
           showToast('danger', "Passwords don't match!");
+        } else if (password.length < 7){ 
+          showToast('danger', "Password must be bigger than 7 characters!");
         } else {
           document.getElementById("register-user").submit();
         }
@@ -218,6 +232,37 @@ const showToast = (category, message) => {
 };
 
 
+//change background on selected file
+
+function HandleFileSelect(fileID) {
+
+  if ($("#" + fileID).hasClass("list-group-item-primary")) {
+    $("#" + fileID).removeClass("list-group-item-primary");
+    $("#btn-"+ fileID).prop("checked", false );
+  } else {
+    $("#" + fileID).addClass("list-group-item-primary");
+    $("#btn-"+ fileID).prop("checked", true );
+  }
+
+  var checkedCount = $("#files input[type='checkbox']:checked").length;
+
+  console.log(checkedCount);
+
+  if (checkedCount > 0) {
+    $("#download-general").css("visibility", "visible");
+    $("#checkbox-general").css("visibility", "visible");
+    $("#delete-general").css("visibility", "visible");
+  } else {
+    $("#checkbox-general").css("visibility", "hidden");
+
+  }
+
+  // if ($("#btn-"+ fileID).is(":checked")) {
+  //   $("#" + fileID).addClass("list-group-item-primary");
+  // } else {
+  //   $("#" + fileID).removeClass("list-group-item-primary");
+  // }
+}
 
 
 // this is a countdown that allows people to reread infos before deleting its account

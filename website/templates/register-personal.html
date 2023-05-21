@@ -40,10 +40,10 @@
 
                     <div class="col-12">
                       <label for="country" class="form-label">Country</label>
-                        <select class="form-select" name='country' aria-label="Default select example">
+                        <select  class="form-select" name='country' aria-label="Default select example">
                           <option selected>Open this select menu</option>
-                          {% for country in countrys %}
-                          <option value="{{country.code}}">{{country.name}}</option>
+                          {% for country in countries %}
+                            <option value="{{country}}"><i class="bi bi-funnel"></i> {{countries[country]}}</option>
                           {% endfor %}
                         </select>
                       <div class="invalid-feedback" id="invalid-country">Please select a valid country!</div>

@@ -39,7 +39,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     username = db.Column(db.String(30))
     password = db.Column(db.String(50))
-    profile_pic = db.Column(db.String(300), default='./static/default images/user.png')
+    profile_pic = db.Column(db.String(300), default='/static/default images/user.png')
     
     files = db.relationship("Files")
 

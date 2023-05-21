@@ -5,6 +5,8 @@ import datetime
 
 import os
 
+import pandas as pd
+
 import random
 import string
 
@@ -24,7 +26,7 @@ auth = Blueprint('auth', __name__)
 def login():
     remember = False
     if current_user.is_authenticated:
-        return redirect(url_for("profilePage.profile"))
+        return redirect(url_for('profilePage.profile', username=current_user.username))
     else:
         if request.method == 'POST':
             username = request.form.get("email")
@@ -61,7 +63,7 @@ def register():
     remember = False #remember user if check is checked
     
     if current_user.is_authenticated:
-        return redirect(url_for("profilePage.profile"))
+        return redirect(url_for('profilePage.profile', username=current_user.username))
     else:
         if request.method == 'POST':
             try:
@@ -127,19 +129,16 @@ def register_data():
     user = User.query.get(current_user.id)
     
     if user.description and user.job and user.username:
-        return redirect(url_for('profilePage.profile'))
+        return redirect(url_for('profilePage.profile', username=current_user.username))
     else:
         if request.method == 'POST':
-            print("check 1")
             try:
                 data = request.json
                 if data["type"] == 'checking':
                     username = data["username"]
                     
                     checkUsername = User.query.filter_by(username = username).first()
-                    print("check 2")
                     if checkUsername or username == "":
-                        print("username ja existe")
                         result = {'message': 'Username already exists, try another one'}
                         return jsonify(result)
                     else:
@@ -172,7 +171,22 @@ def register_data():
 
                     db.session.commit()
                     
-                    return redirect(url_for('profilePage.profile'))
+                    return redirect(url_for('profilePage.profile', username=current_user.username))
             
+        data = pd.read_csv("C:\ISTEC\PROJETO FINAL\TESTES\webserver\website\static/assets/countrys.csv")
+        countries = {}
+        for index, row in data.iterrows():
+            countryCode = row['country']
+            name = row['name']
+            
+            countries[countryCode] = name
+            
+        # for country in countries:
+        #     print(country)
+        #     print(countries[country])
+            
+            # country_Code.append(countryCode)
+            # country_Name.append(name)
+        print(countries)
         
-    return render_template("register-personal.html", client = current_user)
+    return render_template("register-personal.html", client = current_user, countries = countries)

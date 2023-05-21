@@ -5,6 +5,8 @@ from unidecode import unidecode
 
 from werkzeug.utils import secure_filename
 
+from markupsafe import Markup
+
 import os
 
 import json
@@ -91,7 +93,7 @@ def deleteFile(fileId):
         os.remove(path)
         db.session.delete(file)
         db.session.commit()
-        flash(rf"O ficheiro <b>{file.filename}</b> foi apagado com sucesso.", "success")
+        flash(Markup(rf"O ficheiro <b>{file.filename}</b> foi apagado com sucesso."), "success")
         return redirect(url_for('fileExplorer.file_explorer'))
     else:
         return flash("You don't have permission to access that file!", "danger")

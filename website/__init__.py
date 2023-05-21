@@ -39,7 +39,7 @@ def create_app():
     
     @app.errorhandler(404)
     def not_found_error(error):
-        return render_template('error.html', client=current_user, error=True), 404
+        return render_template('error.html', client=current_user, error=True, message="The page you are looking for doesn't exist."), 404
     
     
     from .models import User #ou entao posso usar import .models as models, especifiquei  nome pq n pode ter um . no inicio

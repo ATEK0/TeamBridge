@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-nJfLf7kqUPw1udLIQhqI0H0cVJskqljKzzZjnVnZtURxJ7Vq3zqvdI2Hr44nntnFtRnm8LjF/j+a+IurCgzEw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/img/favicon.png')}}">
+
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     
+
+    <!-- Import for flag icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css"/>
+
+
     <!-- Imports for cropper.js this lets users crop images before uploading-->
     <script src="https://unpkg.com/cropperjs/dist/cropper.js"></script>
     <link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet">
@@ -235,7 +242,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="{{url_for('profilePage.profile')}}">
+              <a class="dropdown-item d-flex align-items-center" href="/profile/{{client.username}}">
                 <i class="bi bi-person"></i>
                 <span>My Profile</span>
               </a>

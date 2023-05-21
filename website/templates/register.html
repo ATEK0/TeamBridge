@@ -5,49 +5,48 @@
 
 <script>
 </script>
+  <form class="mt-5" method="POST" id="register-chose" enctype="multipart/form-data">
+    <div class="container register-chose-c">
+      <center><img src="{{ url_for('static', filename='assets/img/logo+slogan.png')}}" class="logo-register" width="50%"></center>
+      <section class="section register d-flex flex-column py-4">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-<form class="mt-5" method="POST" id="register-chose" enctype="multipart/form-data">
-  <div class="container register-chose-c">
-    <center><img src="{{ url_for('static', filename='assets/img/logo+slogan.png')}}" width="600px"></center>
-    <section class="section register d-flex flex-column py-4">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+              <div class="card mb-3">
 
-            <div class="card mb-3">
+                <div class="card-body">
 
-              <div class="card-body">
-
-                <div class="pt-4 pb-2">
-                  <h5 class="card-title text-center pb-0 fs-4">Hi! Why are you here?</h5>
-                  <p class="text-center small">Register your company, or maybe join one!</p>
-                </div>
-
-                  <div class="col-12">
-                    <button class="btn btn-primary w-100 my-2" id="registerC" type="button" onClick="changeRegisterForm('company')">Join Company</button>
-                    <button class="btn btn-dark w-100" id="joinC" type="button" onClick="window.location.href='/login'">Login to your account</button>
+                  <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Hi! Why are you here?</h5>
+                    <p class="text-center small">Register your company, or maybe join one!</p>
                   </div>
 
+                    <div class="col-12">
+                      <button class="btn btn-primary w-100 my-2" id="registerC" type="button" onClick="changeRegisterForm('company')">Join Company</button>
+                      <button class="btn btn-dark w-100" id="joinC" type="button" onClick="window.location.href='/login'">Login to your account</button>
+                    </div>
+
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-    </section>
-  </div>
-</form><!-- End #main -->
+      </section>
+    </div>
+  </form><!-- End #main -->
 
 <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1000;"></div>
 
 
 <form class="mt-5" method="POST"  id="register-user" enctype="multipart/form-data">
-    <div class="container register-user-c">
+    <div class="container register-user-c notshow" id="register-user-c">
       <section class="section register d-flex flex-column py-4">
         <div class="container">
           
           <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-center">
               <div class="card mb-3">
                 
                 <div class="card-body">
@@ -129,6 +128,7 @@
       </section>
     </div>
 </form> <!--End #main -->
+
 
 
 

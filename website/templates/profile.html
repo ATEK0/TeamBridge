@@ -6,7 +6,7 @@
 <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Profile</h1>
+      <h1>{{client.first_name}}'s Profile</h1>
     </div><!-- End Page Title -->
 
     <section class="section profile">
@@ -16,7 +16,7 @@
           <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-              <img src="./profiles/1.jpeg" alt="Profile" class="rounded-circle">
+              <img src="{{client.profile_pic}}" alt="Profile" class="rounded-circle">
               <h2>{{client.first_name}} {{client.last_name}}</h2>
               <h3>@{{client.username}}</h3>
               <h4>{{client.job}}</h4>
@@ -41,7 +41,7 @@
                 <li class="nav-item">
                   <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
                 </li>
-
+                {% if client.username == profile%}
                 <li class="nav-item">
                   <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
                 </li>
@@ -53,12 +53,13 @@
                 <li class="nav-item">
                   <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
                 </li>
+              {% endif %}
 
               </ul>
               <div class="tab-content pt-2">
 
                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                  <h5 class="card-title">About</h5>
+                  <h5 class="card-title">Biography</h5>
                   <p class="small fst-italic">{{client.description}}</p>
 
                   <h5 class="card-title">Profile Details</h5>
@@ -106,7 +107,7 @@
                   <div class="modal fade" id="modalUploadFoto" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
-                        <form method="post" action="/update-image" enctype="multipart/form-data">
+                        <form method="post" action="/" name="profileImgHandler" id="profileImgHandler" enctype="multipart/form-data">
                           <div class="modal-header">
                             <h5 class="modal-title">Change profile picture</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -117,9 +118,9 @@
                           </div>
                           <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                <button type="submit" class="btn btn-primary" onclick="document.profileImgHandler.action = '/update-image';">Save changes</button>
+                                {% if client.profile_pic != '/static/default images/user.png' and client.profile_pic != '/static/default%20images/user.png'%}<button onclick="document.profileImgHandler.action = '/delete-profile-image';" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a> {% endif %}
                           </div>
-                          <input type="hidden" name="info" id="info" value="upload">
                         </form>
                       </div>
                     </div>
@@ -131,15 +132,12 @@
                     <div class="row mb-3">
                       <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                       <div class="col-md-8 col-lg-9">
-                        <img src="assets/img/profile-img.jpg" alt="Profile">
                         <div class="pt-2">
-                          <a href="" class="btn btn-primary btn-sm" title="Upload new profile image" data-bs-toggle="modal" data-bs-target="#modalUploadFoto"><i class="bi bi-upload"></i></a>
-                          <a href="" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a> <!--button deesaparece caso nao haja foto de perfil-->
+                          <a href="" class="btn btn-primary btn-sm" title="Upload new profile image" data-bs-toggle="modal" data-bs-target="#modalUploadFoto">Edit <i class="bi bi-pencil ms-1"></i></a>
+                          
                         </div>
                       </div>
                     </div>
-
-                    
 
                     <div class="row mb-3">
                       <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>

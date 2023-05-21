@@ -21,11 +21,11 @@
               <h5 class="card-title">@{{client.username}} files</h5>
 
               <!-- List group With Checkboxes and radios -->
-              <ul class="list-group">
+              <ul id="files" class="list-group">
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col d-flex align-self-center">
-                            <input class="form-check-input me-3" style="visibility:hidden;" type="checkbox" value="" aria-label="...">
+                            <input class="form-check-input me-3" style="visibility:hidden;" id="checkbox-general" type="checkbox" value="" aria-label="...">
                             ID
                         </div>
                         <div class="col d-flex align-self-center">
@@ -41,22 +41,22 @@
                             Owner
                         </div>
                         <div class="col d-flex justify-content-end align-center" style="end: 0">
-                            <a ><button type="button" class="btn btn-warning me-2" style="visibility:hidden;" ><i class="bi bi-download"></i></button></a>
-                            <a ><button type="button" class="btn btn-danger"  style="visibility:hidden;"><i class="bi bi-trash"></i></button></a>
+                            <a ><button type="button" class="btn btn-warning me-2" id="download-general" style="visibility:hidden;" ><i class="bi bi-download"></i></button></a>
+                            <a ><button type="button" class="btn btn-danger" id="delete-general" style="visibility:hidden;"><i class="bi bi-trash"></i></button></a>
                         </div>
                     </div>
                 </li>
                 {% if client.files %}
 
                     {% for file in client.files %}
-                        <li class="list-group-item">
+                        <li class="list-group-item cursor" onclick="HandleFileSelect({{file.id}})" id="{{file.id}}">
                             <div class="row">
                                 <div class="col d-flex align-self-center">
-                                    <input class="form-check-input me-3" type="checkbox" value="" aria-label="...">
+                                    <input class="form-check-input me-3" type="checkbox"  id="btn-{{file.id}}" class="checkFile" value="" aria-label="...">
                                     {{ file.id }}
                                 </div>
                                 <div class="col d-flex align-self-center pe-0" style="max-width: fill-available;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-                                    {{ file.filename }}      
+                                    {{ file.filename }}
                                 </div>
                                 <div class="col d-flex align-self-center">
                                     {{ file.upload_date }}
@@ -65,7 +65,7 @@
                                     {{ file.size }}
                                 </div>
                                 <div class="col d-flex align-self-center">
-                                    <a href="/profile/{{ file.username }}" class="pretty-link"><img class="pretty-img" src="{{file.user_image}}"><span class="d-flex align-self-center ms-1">{{ file.username }}</span></a>
+                                    <a href="/profile/{{ file.username }}" class="pretty-link"><img class="pretty-img rounded-circle" src="{{file.user_image}}"><span class="d-flex align-self-center ms-1">{{ file.username }}</span></a>
                                 </div>
                                 <div class="col d-flex justify-content-end align-center" style="end: 0">
                                     <a href="{{ url_for('fileExplorer.download', fileId=file.id) }}"><button type="button" class="btn btn-secondary me-2"><i class="bi bi-download"></i></button></a>
