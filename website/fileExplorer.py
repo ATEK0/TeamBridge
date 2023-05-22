@@ -35,6 +35,7 @@ def file_explorer():
     duplicated = False
     if request.method == "POST":
         file = request.files["file"]
+        print("aaa", file.filename)
         if file:
             existance = Files.query.filter_by(user_id = user.id).all()
             
@@ -49,9 +50,14 @@ def file_explorer():
                 file_stats = os.stat(path)
                 filesize = str(round(file_stats.st_size / (1024 * 1024), 2))
                 
+                file_type = os.path.splitext(file.filename)[1]
                 
+                file_name = file.filename
+
+                # Remove the extension from the filename
+                file_name_without_extension = os.path.splitext(file_name)[0]
                 
-                upload = Files(filename=file.filename, username = user.username, user_image = current_user.profile_pic, user_id = current_user.id, size = filesize)
+                upload = Files(filename=file_name_without_extension, file_type=file_type,username = user.username, user_image = current_user.profile_pic, user_id = current_user.id, size = filesize)
                 
                 db.session.add(upload)
                 db.session.commit()
@@ -74,7 +80,7 @@ def download(fileId):
     file = Files.query.get(fileId)
     
     if user.id == file.user_id:
-        path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}\{file.filename}'
+        path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}\{file.filename + file.file_type}'
         return send_file(path, as_attachment=True)
     else:
         return flash("You don't have permission to access that file!", "danger")
@@ -89,11 +95,54 @@ def deleteFile(fileId):
     file = Files.query.get(fileId)
     
     if user.id == file.user_id:
-        path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}\{file.filename}'
+        path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}\{file.filename + file.file_type}'
         os.remove(path)
         db.session.delete(file)
         db.session.commit()
-        flash(Markup(rf"O ficheiro <b>{file.filename}</b> foi apagado com sucesso."), "success")
+        flash(Markup(rf"O ficheiro <b>{file.filename + file.file_type}</b> foi apagado com sucesso."), "success")
         return redirect(url_for('fileExplorer.file_explorer'))
     else:
         return flash("You don't have permission to access that file!", "danger")
+    
+    
+    
+@fileExplorer.route('/file-explorer/changeFileName', methods=["POST"])
+@login_required
+def changeFileName():
+
+    # result = {'message': 'OK'}
+    # return jsonify(result)
+
+    if request.method == "POST":
+        data = request.json
+        
+        if data['type'] == 'change':
+            file = Files.query.get(data['id'])
+            
+            current_file_path = f'C:/ISTEC/PROJETO FINAL/TESTES/webserver/files/{file.user_id}/{file.filename + file.file_type}'
+            
+            if file.file_type == ".jpeg":
+                file.file_type = ".jpg"
+            
+            new_file_path = f'C:/ISTEC/PROJETO FINAL/TESTES\webserver/files/{file.user_id}/{data["nameChange"] + file.file_type}'
+            
+            file.filename = data['nameChange']
+            
+            db.session.commit()
+
+            os.rename(current_file_path, new_file_path)
+            
+            result = {
+                'filename': file.filename,
+                'message': f'Name changed successfully to {file.filename + file.file_type}!'
+            }
+            return jsonify(result)
+        
+        elif data['type'] == 'close':
+            file = Files.query.get(data['id'])
+            
+            result = {
+                'filename': file.filename,
+                'message': 'No changes made!'
+            }
+            return jsonify(result)

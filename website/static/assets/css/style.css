@@ -1303,6 +1303,54 @@ h6 {
 
 
 /*--------------------------------------------------------------
+# file explorer MyFiles
+--------------------------------------------------------------*/
+.hideLongName {
+  max-width: fill-available;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.changeNameInput, .changeNameInput:active, .changeNameInput:focus, .changeNameInput:focus-visible {
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.changeNameIconConfirm {
+  color: white;
+  font-weight: bold;
+  padding: 2px;
+
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.changeNameIconCancel {
+  color: white;
+  font-weight: bold;
+  padding: 2px;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+/*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
 .footer {

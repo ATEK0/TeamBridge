@@ -48,6 +48,7 @@ class Files(db.Model):
     upload_date = db.Column(db.DateTime(timezone=True), default=func.now())
     filename = db.Column(db.String(300))
     size = db.Column(db.String(20))
+    file_type = db.Column(db.String(20))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     username = db.Column(db.String(30))
     user_image = db.Column(db.String(300), default='./static/default images/user.png')

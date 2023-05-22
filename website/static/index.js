@@ -257,12 +257,135 @@ function HandleFileSelect(fileID) {
 
   }
 
-  // if ($("#btn-"+ fileID).is(":checked")) {
-  //   $("#" + fileID).addClass("list-group-item-primary");
-  // } else {
-  //   $("#" + fileID).removeClass("list-group-item-primary");
+}
+
+function HandleInputClick(element) {
+  if (!element.disabled) {
+    event.stopPropagation();
+  }
+}
+
+function changeFileName(method, fileID) {
+  if (method != 'reverse') {
+    $("#changeNameInput-" + fileID).removeClass("changeNameInput");
+    $("#changeNameIconCancel-" + fileID).removeClass("d-none");
+
+
+    $("#changeNameInput-" + fileID).removeAttr('disabled');
+    $("#changeNameIcon-" + fileID).addClass("d-none");
+    $("#changeNameIconConfirm-" + fileID).removeClass("d-none");
+
+    $('#changeNameInput-' + fileID).focus();
+
+  } else {
+    resetChangeName(fileID);
+  }
+  
+
+}
+
+function resetChangeName(fileID) {
+  $("#changeNameInput-" + fileID).addClass("changeNameInput");
+  $("#changeNameInput-" + fileID).attr("disabled", true);
+  $("#changeNameIcon-" + fileID).removeClass("d-none");
+
+  $("#changeNameIconCancel-" + fileID).addClass("d-none");
+  $("#changeNameIconConfirm-" + fileID).addClass("d-none");
+}
+
+$(document).on('click', '#changeNameOptions', function(event) {
+  event.stopPropagation();
+});
+
+$('#changeNameInput').blur(function(event) {
+  var fileID = $(this).data('file-id');
+  console.log(fileID);
+  changeFileName('reverse', fileID); 
+});
+
+
+
+function FetchFileName(fileID, option, newname) {
+  const data = {
+    type: option,
+    id: fileID,
+    nameChange: newname
+  };
+
+  fetch('/file-explorer/changeFileName', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(result => {
+      // Process the response
+      console.log(result);
+
+      if (option == 'close') {
+        resetChangeName(fileID);
+        $("#changeNameInput-" + fileID).val(result['filename']);
+      } else {
+        resetChangeName(fileID);
+        $("#changeNameInput-" + fileID).val(result['filename']);
+        showToast('success', result["message"]);
+      }
+      
+    })
+    .catch(error => {
+      // Handle any errors that occur during the request
+      console.error('Error:', error);
+    });
+
+  // if (option == 'check') {
+
+
+  //   resetChangeName(fileID);
+  // } else if (option == 'stop') {
+    
+
+  //   resetChangeName(fileID);
   // }
 }
+
+// fetch('/register', {
+//   method: 'POST',
+//   headers: {
+//     'Content-Type': 'application/json'
+//   },
+//   body: JSON.stringify(data)
+// })
+//   .then(response => response.json())
+//   .then(result => {
+//     // Process the response
+//     console.log(result);
+//     var password = $("#yourPassword").val()
+
+//     if (result["message"] === 'OK'){
+//       if ($("#yourEmail").val().length < 3) {
+//         showToast('danger', "Your email must be bigger than 3 characters");
+//       } else if ($("#firstName").val().length <= 1) {
+//         showToast('danger', "Your name must be bigger than 1 character");
+//       } else if ($("#lastName").val().length <= 1) {
+//         showToast('danger', "Your name must be bigger than 1 character");
+//       } else if ($("#yourPassword").val() != $("#yourPassword2").val()) {
+//         showToast('danger', "Passwords don't match!");
+//       } else if (password.length < 7){ 
+//         showToast('danger', "Password must be bigger than 7 characters!");
+//       } else {
+//         document.getElementById("register-user").submit();
+//       }
+//     } else {
+//       showToast('danger', result["message"]);
+//     }
+//   })
+//   .catch(error => {
+//     // Handle any errors that occur during the request
+//     console.error('Error:', error);
+//   });
+
 
 
 // this is a countdown that allows people to reread infos before deleting its account
