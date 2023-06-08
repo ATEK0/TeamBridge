@@ -1246,6 +1246,18 @@ h6 {
   transition: all 1s ease-in-out;
 }
 
+.register-personal {
+  position: absolute;
+  top: 5rem;
+}
+
+#add-infos-user {
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 
 
@@ -1375,4 +1387,8 @@ h6 {
 
 .text-muted {
   font-size: 12px;
+}
+
+.fit-content {
+  width: fit-content !important;
 }

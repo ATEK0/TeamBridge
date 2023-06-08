@@ -104,6 +104,8 @@ function registerHandler(type) {
           showToast('danger', "Passwords don't match!");
         } else if (password.length < 7){ 
           showToast('danger', "Password must be bigger than 7 characters!");
+        } else if (!$("#acceptTerms").is(":checked")){
+          showToast('danger', "You need to accept the terms to continue");
         } else {
           document.getElementById("register-user").submit();
         }
@@ -143,6 +145,8 @@ function addInfosHandler(type) {
           const field = document.getElementById('birth');
           field.setCustomValidity('Please fill this field');
           field.reportValidity();
+        } else if ($("#yourUsername").val().length < 3) { 
+          showToast('danger', "Your username needs to be bigger than 3 characters");
         } else {
           document.getElementById("add-infos-user").submit();
         }
@@ -160,19 +164,21 @@ function addInfosHandler(type) {
 
 const showToast = (category, message) => {
   const toastContainer = document.createElement('div');
-  toastContainer.setAttribute('aria-live', 'polite');
+  toastContainer.setAttribute('aria-live', 'assertive');
   toastContainer.setAttribute('aria-atomic', 'true');
   toastContainer.style.position = 'relative';
   toastContainer.style.zIndex = '2000';
+  toastContainer.classList.add("fit-content");
 
   const toastElement = document.createElement('div');
   toastElement.classList.add('toast');
   toastElement.classList.add(`toast-${category}`);
   toastElement.classList.add('position-fixed');
+  toastElement.classList.add('ms-3')
   toastElement.classList.add('mt-3')
 
   toastElement.style.marginRight = '20px';
-  toastElement.style.minWidth = '400px !important';
+  toastElement.style.width = '400px !important';
   toastElement.style.top = '40px';
   toastElement.style.right = '0';
   toastElement.setAttribute('data-delay', '7000');

@@ -6,8 +6,14 @@
         <section class="section register d-flex flex-column align-items-center justify-content-center py-4">
           <div class="container login-form">
             <div class="row justify-content-center">
+              
+              <div class="col-lg-3 col-md-5 d-flex flex-column justify-content-center">
+
+                <img src="{{ url_for('static', filename='assets/img/favicon.png')}}" alt="TeamBridgeLogo">
+
+              </div>
+
               <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-center">
-                <!--<img src="{{ url_for('static', filename='assets/img/favicon.png')}}" width="100px" height="140px" class="mb-3 mt-0" alt="TeamBridge">-->
                 <div class="card mb-3">
   
                   <div class="card-body">
@@ -43,8 +49,9 @@
                       <div class="col-12">
                         <button class="btn btn-primary w-100" type="submit">Login</button>
                       </div>
-                      <div class="col-12">
+                      <div class="col-12 pt-2">
                         <p class="small mb-0">Don't have account? <a href="{{url_for('auth.register')}}">Create an account</a></p>
+                        <p class="small mb-0">Lost your password? <a href="{{url_for('auth.register')}}">Recover your password</a></p>
                       </div>
                     </form>
   
@@ -52,6 +59,10 @@
                 </div>
   
               </div>
+
+              
+
+
             </div>
           </div>
   

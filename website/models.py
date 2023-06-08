@@ -41,7 +41,13 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50))
     profile_pic = db.Column(db.String(300), default='/static/default images/user.png')
     
+    instagram = db.Column(db.String(150))
+    facebook = db.Column(db.String(150))
+    twitter = db.Column(db.String(150))
+    linkedin = db.Column(db.String(150))
+    
     files = db.relationship("Files")
+
 
 class Files(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -59,8 +65,19 @@ class Company(db.Model):
     name = db.Column(db.String(150))
     nif = db.Column(db.String(15))
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True, nullable=False)
-    workers = db.relationship("User", backref="company", foreign_keys='User.company_id')
-
+    
+class CompanyInvites(db.Model):
+    id = db.Column(db.String(150), primary_key=True, unique=True, nullable=False)
+    creator = db.Column(db.Integer, db.ForeignKey('user.id'))
+    companyTarget = db.Column(db.Integer, db.ForeignKey('company.id'))
+    uses = db.Column(db.Integer)
+    
+class UserCompany(db.Model):
+    personID = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    companyID = db.Column(db.Integer, db.ForeignKey('company.id'), primary_key=True)
+    permission = db.Column(db.Integer)
+    
+    
 class Team(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50, collation='NOCASE'))

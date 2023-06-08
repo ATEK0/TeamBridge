@@ -15,10 +15,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 
+from .emailHandler import emailSender
+
+sender = emailSender()
+
+
 def generate_random_invite():
     characters = string.ascii_letters + string.digits
     random_string = ''.join(random.choice(characters) for _ in range(10))
     return random_string
+
 
 auth = Blueprint('auth', __name__)
 
@@ -115,6 +121,9 @@ def register():
                     
                     db.session.commit()
                     
+                    # sender.sendEmail_Complete(new_user.email, new_user.username, new_user.first_name)
+                    # Create an instance of emailSender
+                    
                     login_user(new_user, remember=True) #remember user if check is checked
                     os.mkdir(f'C:\\ISTEC\\PROJETO FINAL\\TESTES\\webserver\\files\\{new_user.id}')
                     flash("Conta criada com sucesso", category="success")
@@ -160,6 +169,7 @@ def register_data():
                 user = User.query.get(current_user.id)
                 check_username = User.query.get(username)
                 
+                
                 if check_username:
                     flash("That username is already taken!")  
                 else:
@@ -170,6 +180,9 @@ def register_data():
                     user.birthday = expiration_date
 
                     db.session.commit()
+                    
+                    sender.sendEmail_Complete(user.email, user.username, user.first_name)
+
                     
                     return redirect(url_for('profilePage.profile', username=current_user.username))
             

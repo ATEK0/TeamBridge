@@ -5,9 +5,10 @@
 
 
 <form class="mt-5" method="POST" id="add-infos-user" enctype="multipart/form-data">
-    <div class="container">
-      <section class="section register d-flex flex-column align-items-center justify-content-center py-4">
+    <div class="container register-personal">
+      <section class="section register d-flex flex-column py-4">
         <div class="container">
+          
           <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
@@ -43,7 +44,7 @@
                         <select  class="form-select" name='country' aria-label="Default select example">
                           <option selected>Open this select menu</option>
                           {% for country in countries %}
-                            <option value="{{country}}"><i class="bi bi-funnel"></i> {{countries[country]}}</option>
+                            <option value="{{countries[country]}}"><i class="bi bi-funnel"></i> {{countries[country]}}</option>
                           {% endfor %}
                         </select>
                       <div class="invalid-feedback" id="invalid-country">Please select a valid country!</div>

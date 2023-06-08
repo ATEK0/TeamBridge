@@ -35,12 +35,14 @@ def file_explorer():
     duplicated = False
     if request.method == "POST":
         file = request.files["file"]
-        print("aaa", file.filename)
         if file:
             existance = Files.query.filter_by(user_id = user.id).all()
             
             for exist in existance:
-                if exist.filename == file.filename:
+                print(exist.filename + exist.file_type)
+                print("aaa", file.filename)
+
+                if (exist.filename + exist.file_type) == file.filename:
                     duplicated = True
             
             if not duplicated:
