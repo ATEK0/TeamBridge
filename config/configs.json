@@ -1,0 +1,6 @@
+{
+    "SECRET_KEY":"EIgKcwiAndmX3qL6sMDCVQABJOY12rGeQXsY9Ri9S9h41ivryU",
+    "DB_NAME": "teambridge",
+    "DB_HOST": "AFONSOALMEIDA",
+    "DB_DRIVER": "ODBC+Driver+17+for+SQL+Server"
+}

@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block title %}Gestor de ficheiros{% endblock %}
+
+{% block content %}
+
+<style>
+    .list-container {
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; 
+      }
+      
+      #files {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 100%; 
+      }
+</style>
+
+    <section class="section">
+        <form method="POST" action="/file-explorer" enctype="multipart/form-data" >
+            <h3><b>Your Files</b></h3>
+            <div class="form-group">
+                <input type="file" class="form-control" id="file" name="file" multiple>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary mb-3">Upload</button>
+        </form>
+      <div class="row">
+            <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">@{{client.username}} files</h5>
+              {{pathsize}} / 1000MB
+              <div class="progress">
+                {% if pathpercent < 60 %}
+                    <div class="progress-bar" role="progressbar" style="width: {{pathpercent}}%" aria-valuenow="{{pathpercent}}" aria-valuemin="0" aria-valuemax="100"></div>
+                {% elif pathpercent < 80 %}    
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{pathpercent}}%" aria-valuenow="{{pathpercent}}" aria-valuemin="0" aria-valuemax="100"></div>
+                {% else %}
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{pathpercent}}%" aria-valuenow="{{pathpercent}}" aria-valuemin="0" aria-valuemax="100"></div>
+                {% endif %}
+            </div>
+
+              <!-- List group With Checkboxes and radios -->
+              <div class="list-container" style="overflow-x: auto;">
+                <ul id="files" class="list-group pt-3" style="min-width: 1050px;">
+                  <!-- List items go here -->
+                
+                    <li class="list-group-item">
+                    <div class="row" style="font-size: 15px;">
+                        <div class="col-1 d-flex align-items-center">
+                            <input class="form-check-input me-3 " style="visibility:hidden;" id="checkbox-general" type="checkbox" value="" aria-label="...">
+                            ID
+                        </div>
+                        <div class="col-3 d-flex align-items-center">
+                            Name        
+                        </div>
+                        <div class="col-1 text-center d-flex align-items-center justify-content-center">
+                            File Type
+                        </div>
+                        <div class="col-2 text-center d-flex align-items-center justify-content-center">
+                            Upload Date
+                        </div>
+                        <div class="col-1 text-center d-flex align-items-center justify-content-center">
+                            Size (mb)
+                        </div>
+                        <div class="col-2 text-center d-flex align-items-center justify-content-center">
+                            Owner
+                        </div>
+                        <div class="col-2 d-flex justify-content-end align-items-center" style="end: 0">
+                            <a><button type="button" class="btn btn-dark me-2" id="download-general" style="visibility:hidden;" onClick="DownloadMultipleFiles()"><i class="bi bi-download"></i></button></a>
+                            <a ><button type="button" class="btn btn-dark" id="delete-general" style="visibility:hidden;"><i class="bi bi-trash"></i></button></a>
+                        </div>
+                    </div>
+                </li>
+                {% if client.files %}
+
+                    {% for file in client.files %}
+                        <li class="list-group-item cursor" style="z-index: 10" onclick="HandleFileSelect({{file.id}})" id="{{file.id}}">
+                            <div class="row">
+                                <div class="col-1">
+                                    <input class="form-check-input me-3" type="checkbox"  id="btn-{{file.id}}" class="checkFile" value="{{file.id}}" aria-label="...">
+                                    {{ file.id }}
+                                </div>
+                                <div class="col-3" onclick="event.stopPropagation()">
+                                    <span onclick="changeFileName('a','{{file.id}}'); event.stopPropagation()">
+                                        <i id="changeNameIcon-{{file.id}}" class="bi bi-pencil me-1"></i></span>
+                                        <span id="changeNameOptions" onclick="FetchFileName('{{file.id}}', 'change', document.getElementById('changeNameInput-{{file.id}}').value)"><i id="changeNameIconConfirm-{{file.id}}" class="bg-success bi bi-check2 me-1 d-none changeNameIconConfirm"></i></span>
+                                        <span id="changeNameOptions" onclick="FetchFileName('{{file.id}}', 'close', '')"><i id="changeNameIconCancel-{{file.id}}" class="bg-danger bi bi-x me-1 d-none changeNameIconCancel"></i></span>
+                                    
+                                    <input type="text" onclick="" data-file-id="{{ file.id }}" class="changeNameInput rounded" id="changeNameInput-{{file.id}}" value="{{file.filename}}" disabled title="{{file.filename}}"/>
+                                </div>
+                                <div class="col-1 text-center">
+                                    {{ file.file_type }}
+                                </div>
+                                <div class="col-2">
+                                    <ol class="breadcrumb d-flex justify-content-center">
+                                        <li class="breadcrumb-item" data-bs-toggle="tooltip" data-bs-placement="top" title="{{file.upload_date}}">
+                                            <span id="uploadDate-{{ file.id }}" class="text-center">{{ file.upload_date }}</span> 
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="col-1 text-center">
+                                    {{ file.size }}
+                                </div>
+                                <div class="col-2 d-flex justify-content-center">
+                                    <a href="/profile/{{ file.username }}" class="pretty-link"><img class="pretty-img rounded-circle" src="{{file.user_image}}"><span class="d-flex align-self-center ms-1">{{ file.username }}</span></a>
+                                </div>
+                                <div class="col-2 d-flex justify-content-end align-center" style="end: 0">
+                                    <a href="{{ url_for('fileExplorer.download', fileId=file.id) }}"><button type="button" onclick="event.stopPropagation()" class="btn btn-light me-2"><i class="bi bi-download"></i></button></a>
+                                    <a href="{{ url_for('fileExplorer.deleteFile', fileId=file.id) }}"><button type="button" onclick="event.stopPropagation()" class="btn btn-light "><i class="bi bi-trash"></i></button></a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor%}
+            
+                {% else %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col d-flex align-self-center">
+                            You have no files, why not start uploading some? 🤩
+                        </div>
+                    </div>
+                </li>
+                {% endif %}
+
+            </ul>
+        </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+<script>
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    function timeAgoForAll() {
+        var currentDate = new Date();
+    
+        // Select all elements with IDs starting with "uploadDate-"
+        var uploadDateElements = document.querySelectorAll('[id^="uploadDate-"]');
+    
+        // Iterate through each element and update its content
+        uploadDateElements.forEach(function(element) {
+            var dateString = element.innerText; // Get the inner text (Date) from the element
+            var formattedDateString = dateString.slice(0, -13); // Remove milliseconds
+            // Parse the date string, handling the time zone offset
+            var dateToCompare = new Date(formattedDateString);
+            var timeDifference = currentDate - dateToCompare;
+    
+            console.log(dateString)
+            console.log(dateToCompare)
+            console.log(timeDifference)
+
+
+            var seconds = Math.floor(timeDifference / 1000);
+            var minutes = Math.floor(seconds / 60);
+            var hours = Math.floor(minutes / 60);
+            var days = Math.floor(hours / 24);
+            var months = Math.floor(days / 30); // Assuming an average month has 30 days
+            var years = Math.floor(months / 12);
+    
+            if (years > 0) {
+                element.innerText = years + " year" + (years === 1 ? "" : "s") + " ago";
+            } else if (months > 0) {
+                element.innerText = months + " month" + (months === 1 ? "" : "s") + " ago";
+            } else if (days > 0) {
+                element.innerText = days + " day" + (days === 1 ? "" : "s") + " ago";
+            } else if (hours > 0) {
+                element.innerText = hours + " hour" + (hours === 1 ? "" : "s") + " ago";
+            } else if (minutes > 0) {
+                element.innerText = minutes + " minute" + (minutes === 1 ? "" : "s") + " ago";
+            } else {
+                element.innerText = "Just now";
+            }
+        });
+    }
+    
+    // Call the function to update all "uploadDate-" elements
+    timeAgoForAll();
+    
+    
+    
+    
+    
+</script>
+
+
+{% endblock %}

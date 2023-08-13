@@ -1,16 +1,14 @@
-from flask import Blueprint, render_template, request, flash, jsonify, url_for, send_file, redirect
-from flask_login import login_required, current_user, logout_user
+from flask import Blueprint, render_template
+from flask_login import login_required, current_user
 
-from unidecode import unidecode
 
-from werkzeug.utils import secure_filename
-
-import os, shutil
-
-import json
+import os
 from . import db
 
-from .models import Note, User, Files, UserCompany
+from .models.Note import Note
+from .models.User import User
+from .models.Files import Files
+from .models.UserCompany import UserCompany
 
 dashboard = Blueprint('dashboard', __name__)
 
@@ -31,7 +29,7 @@ def dashboardHome():
     
     inCompany = UserCompany.query.filter_by(personID = current_user.id).all()
     
-    return render_template("dashboard.html", client=current_user, inCompany = inCompany)
+    return render_template("/dashboard/dashboard.html", client=current_user, inCompany = inCompany)
 
 
 

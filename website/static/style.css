@@ -50,11 +50,12 @@ to {
 
 .pretty-link {
   display: flex;
+  align-items: center;
   text-decoration: none;
   color: #4897e7;
   font-weight: bold;
-  transition: 1s all;
-  transform: translateX(-30px);
+  transition: color 0.5s, transform 0.5s;
+  transform: translateX(-20px);
 }
 
 .pretty-link:hover {
@@ -66,13 +67,14 @@ to {
 .pretty-img {
   width: 30px;
   opacity: 0;
-  transition: 1s all;
+  transition: opacity 0.5s, width 0.5s;
 }
 
 .pretty-link:hover > .pretty-img {
   opacity: 1;
-
+  width: 30px;
 }
+
 
 .cursor {
   cursor: pointer;

@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 
-from PIL import Image
 import datetime
 
 import os
@@ -12,7 +11,8 @@ import string
 
 import uuid
 
-from .models import User, Company
+from .models.User import User
+from .models.Company import Company
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -34,7 +34,7 @@ auth = Blueprint('auth', __name__)
 def login():
     remember = False
     if current_user.is_authenticated:
-        return redirect(url_for('profilePage.profile', username=current_user.username))
+        return redirect(url_for('dashboard.dashboardHome'))
     else:
         if request.method == 'POST':
             email = request.form.get("email")
@@ -56,7 +56,7 @@ def login():
             else:
                 flash("Incorrect email", category="warning")
             
-    return render_template("login.html", client=current_user)
+    return render_template("/auth/login.html", client=current_user)
 
 @auth.route('/logout')
 @login_required
@@ -131,7 +131,7 @@ def register():
                     flash("Conta criada com sucesso", category="success")
                     return redirect(url_for("auth.register_data"))
                         
-    return render_template("register.html", client=current_user, company="something")
+    return render_template("/auth/register.html", client=current_user, company="something")
 
 
 @auth.route('/add-infos', methods=['GET','POST'])
@@ -201,7 +201,7 @@ def register_data():
 
         print(countries)
         
-    return render_template("register-personal.html", client = current_user, countries = countries)
+    return render_template("/auth/register-personal.html", client = current_user, countries = countries)
 
 
 @auth.route('/resetPassword/<path:resetCode>', methods=["GET", "POST"])
@@ -210,7 +210,7 @@ def resetPasswordPage(resetCode):
     user = User.query.filter_by(resetPassword = resetCode).first()
 
     if not user:
-        return render_template('error.html', client=user, message="Invalid Link")
+        return render_template('/errors/error404.html', client=user, message="Invalid Link")
 
     if request.method == "POST":
         password = request.form.get("newpassword")

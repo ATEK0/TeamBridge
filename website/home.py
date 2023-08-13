@@ -10,7 +10,9 @@ import os
 import json
 from . import db
 
-from .models import Note, User, Files
+from .models.Note import Note 
+from .models.User import User
+from .models.Files import Files
 
 home = Blueprint('home', __name__)
 
@@ -27,5 +29,5 @@ def get_dir_size(path):
 
 @home.route('/', methods=["GET", "POST"])
 def homePage():
-    return render_template("index.html", client=current_user)
+    return render_template("/frontpage/index.html", client=current_user)
 

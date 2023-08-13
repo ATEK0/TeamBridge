@@ -8,7 +8,9 @@ import os, shutil
 import json
 from . import db
 
-from .models import Note, User, Files
+from .models.Note import Note
+from .models.User import User
+from .models.Files import Files
 
 from .emailHandler import emailSender
 
@@ -33,7 +35,7 @@ def profile(username):
     user = User.query.filter_by(username = username).first()
     print(user)
     if not user:
-        return render_template('error.html', client=user, message="Profile not found")
+        return render_template('/errors/error404.html', client=user, message="Profile not found")
 
     if request.method == "POST":
         return "Dados serao mudados :)"
@@ -43,7 +45,7 @@ def profile(username):
     # 100000000 100mb
     pathsize = (pathsize * 100) / 1000000000
     
-    return render_template('profile.html', client=user, profile = current_user.username, used_space=pathsize)
+    return render_template('/profile/profile.html', client=user, profile = current_user.username, used_space=pathsize)
         
         
 @profilePage.route('/change-password', methods=["POST"])

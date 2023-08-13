@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify, url_for, send_file, redirect, render_template_string, get_flashed_messages
+from flask import Blueprint, render_template, request, flash, jsonify, url_for, send_file, redirect, get_flashed_messages
 from flask_login import login_required, current_user
 
 from unidecode import unidecode
@@ -12,7 +12,9 @@ import os
 import json
 from . import db
 
-from .models import Note, User, Files
+from .models.Note import Note
+from .models.User import User
+from .models.Files import Files
 
 fileExplorer = Blueprint('fileExplorer', __name__)
 
@@ -43,8 +45,6 @@ def file_explorer():
                 existance = Files.query.filter_by(user_id = user.id).all()
                 
                 for exist in existance:
-                    print(exist.filename + exist.file_type)
-                    print("aaa", file.filename)
 
                     if (exist.filename + exist.file_type) == file.filename:
                         duplicated = True
@@ -54,11 +54,18 @@ def file_explorer():
                     path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}'
                     pathsize = get_dir_size(path)
                     
-                    file_stats = os.stat(path)
-                    filesize = str(round(file_stats.st_size / (1024 * 1024), 2))
+                    path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}\{file.filename}'
+                    
+                    
+                    file_size = len(file.read())
+                    filesize = str(round(file_size / (1024 * 1024), 2))
+                    
+                    print(filesize)
                     
                     if float(pathsize) + float(filesize) <= 1000:
                         path = f'C:\ISTEC\PROJETO FINAL\TESTES\webserver\\files\{user.id}\{file.filename}'
+                        
+                        print(filesize)
                         
                         file.save(path)
                         
@@ -91,7 +98,7 @@ def file_explorer():
     pathpercent = (pathsize * 100) / 1000
     print(pathsize)
         
-    return render_template("file_explorer.html", client=user, pathsize = round(pathsize,2), pathpercent = round(pathpercent, 2))
+    return render_template("/files/file_explorer.html", client=user, pathsize = round(pathsize,2), pathpercent = round(pathpercent, 2))
 
 
 @fileExplorer.route('/file-explorer/download/<path:fileId>', methods=["GET","POST"])

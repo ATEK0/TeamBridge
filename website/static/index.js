@@ -321,41 +321,6 @@ function resetPassword(userID, emaill) {
     });
 }
 
-// fetch('/register', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json'
-//   },
-//   body: JSON.stringify(data)
-// })
-//   .then(response => response.json())
-//   .then(result => {
-//     // Process the response
-//     console.log(result);
-//     var password = $("#yourPassword").val()
-
-//     if (result["message"] === 'OK'){
-//       if ($("#yourEmail").val().length < 3) {
-//         showToast('danger', "Your email must be bigger than 3 characters");
-//       } else if ($("#firstName").val().length <= 1) {
-//         showToast('danger', "Your name must be bigger than 1 character");
-//       } else if ($("#lastName").val().length <= 1) {
-//         showToast('danger', "Your name must be bigger than 1 character");
-//       } else if ($("#yourPassword").val() != $("#yourPassword2").val()) {
-//         showToast('danger', "Passwords don't match!");
-//       } else if (password.length < 7){ 
-//         showToast('danger', "Password must be bigger than 7 characters!");
-//       } else {
-//         document.getElementById("register-user").submit();
-//       }
-//     } else {
-//       showToast('danger', result["message"]);
-//     }
-//   })
-//   .catch(error => {
-//     // Handle any errors that occur during the request
-//     console.error('Error:', error);
-//   });
 
 
 

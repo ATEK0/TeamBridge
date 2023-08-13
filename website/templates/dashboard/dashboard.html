@@ -3,7 +3,62 @@
 
 {% block content %}
 
-<h1>Here are your notes</h1>
+<div class="row ">
+  <div class="col-9">
+    <div class="card p-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Company</li>
+      </ol>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="card p-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Profile</li>
+      </ol>
+      <img src="{{client.profile_pic}}" alt="Profile" class="rounded-circle">
+    </div>
+
+  </div>
+  <div class="col-4">
+    <div class="card p-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Messages</li>
+      </ol>
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="card p-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Notes</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="card p-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Files</li>
+      </ol>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="card p-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Shared Files</li>
+      </ol>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card p-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Tickets</li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+
 <ul class="list-group list-group-flush" id="notes">
     {% for note in client.notes %}
     <li class="list-group-item">
