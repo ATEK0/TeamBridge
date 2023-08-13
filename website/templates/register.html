@@ -1,0 +1,185 @@
+{%extends "base.html"%}
+{% block title %}Register{% endblock%}
+
+{% block content %}
+
+<script>
+</script>
+  <form class="mt-5" method="POST" id="register-chose" enctype="multipart/form-data">
+    <div class="container register-chose-c">
+      <center><img src="{{ url_for('static', filename='assets/img/logo+slogan.png')}}" class="logo-register" width="50%"></center>
+      <section class="section register d-flex flex-column py-4">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+              <div class="card mb-3">
+
+                <div class="card-body">
+
+                  <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Hi! Why are you here?</h5>
+                    <p class="text-center small">Register your company, or maybe join one!</p>
+                  </div>
+
+                    <div class="col-12">
+                      <button class="btn btn-primary w-100 my-2" id="registerC" type="button" onClick="changeRegisterForm('company')">Join Company</button>
+                      <button class="btn btn-dark w-100" id="joinC" type="button" onClick="window.location.href='/login'">Login to your account</button>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </form><!-- End #main -->
+
+<div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1000;"></div>
+
+
+<form class="mt-5" method="POST"  id="register-user" enctype="multipart/form-data">
+    <div class="container register-user-c notshow" id="register-user-c">
+      <section class="section register d-flex flex-column py-4">
+        <div class="container">
+          
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-center">
+              <div class="card mb-3">
+                
+                <div class="card-body">
+
+                  <div class="pb-2 pt-0">
+                    <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
+                    <p class="text-center small">Enter your personal details to create account</p>
+                  </div>
+
+                  <div class="d-inline-flex"> 
+                    <div class="col-6 mx-auto" style="width: 49%;">
+                      <label for="firstName" class="form-label">First Name</label>
+                      <input type="text" name="firstName" class="form-control" id="firstName" minlenght="2" required>
+                      <div class="invalid-feedback" id="invalid-name">Please enter your first name!</div>
+                    </div>
+                  
+                    <div class="col-6 mx-auto" style="width: 49%;">
+                      <label for="lastName" class="form-label text-end" style="text-align: right;">Last Name</label>
+                      <input type="text" name="lastName" class="form-control" id="lastName" minlenght="2" required>
+                      <div class="invalid-feedback">Please enter your last name!</div>
+                    </div>
+                  </div>
+                  
+
+                    <div class="col-12">
+                      <label for="yourEmail" class="form-label">Your Email</label>
+                      <input type="email" name="email" class="form-control" id="yourEmail" minlenght="4" required>
+                      <div class="invalid-feedback" id="invalid-email" >Please enter a valid Email adddress!</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourPassword" class="form-label">Password</label>
+                      <input type="password" name="password" class="form-control" minlength="7" id="yourPassword" required>
+                      <div class="invalid-feedback">Please enter your password!</div>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label for="yourPassword" class="form-label">Confirm Password</label>
+                        <input type="password" name="password1" class="form-control" minlength="7" id="yourPassword2" required>
+                        <div class="invalid-feedback" id="invalid-password">Please confirm your password!</div>
+                    </div>
+                    
+
+                    <div class="col-12 mb-4">
+                        <label for="yourPassword" class="form-label">Profile Image</label>
+                        <input type="file" name="profile_pic" class="form-control" id="profile_pic" accept="image/png, image/jpeg, image/jpg" maxlength="5000000">
+                    </div>
+
+
+                    <div class="col-12">
+                        <div class="form-check">
+                          <input class="form-check-input" name="rememberme" type="checkbox" id="acceptRemember">
+                          <label class="form-check-label" for="acceptRemember">Remember me</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" name="terms" type="checkbox" id="acceptTerms" required>
+                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
+                        <div class="invalid-feedback">You must agree before submitting.</div>
+                      </div>
+                    </div>
+                    <div class="col-12 pt-4">
+                      <button class="btn btn-primary w-100" type="button" onClick="registerHandler()">Create Account</button>
+                    </div>
+                    <div class="col-12">
+                      <p class="small mb-0">Already have an account? <a href="{{url_for('auth.login')}}">Log in</a></p>
+                    </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" onClick="changeRegisterForm('reverse')">
+                <i class="bi bi-arrow-left-circle pt-2 pt-3"></i> Back 
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+</form> <!--End #main -->
+
+<script>
+  async function registerHandler(type) {
+
+    const data = {
+      type: "checking",
+      email: $("#yourEmail").val(),
+      fname: $("#firstName").val(),
+      lname: $("#lastName").val(),
+      password: $("#yourPassword").val()
+    };
+    
+    await fetch('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(result => {
+        // Process the response
+        console.log(result);
+        var password = $("#yourPassword").val()
+  
+        if (result["message"] === 'OK'){
+          if ($("#yourEmail").val().length < 3) {
+            showToast('danger', "Your email must be bigger than 3 characters");
+          } else if ($("#firstName").val().length <= 1) {
+            showToast('danger', "Your name must be bigger than 1 character");
+          } else if ($("#lastName").val().length <= 1) {
+            showToast('danger', "Your name must be bigger than 1 character");
+          } else if ($("#yourPassword").val() != $("#yourPassword2").val()) {
+            showToast('danger', "Passwords don't match!");
+          } else if (password.length < 7){ 
+            showToast('danger', "Password must be bigger than 7 characters!");
+          } else if (!$("#acceptTerms").is(":checked")){
+            showToast('danger', "You need to accept the terms to continue");
+          } else {
+            document.getElementById("register-user").submit();
+          }
+        } else {
+          showToast('danger', result["message"]);
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occur during the request
+        console.error('Error:', error);
+      });
+    
+  }
+</script>
+
+
+{%endblock%}

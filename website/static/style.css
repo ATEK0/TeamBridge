@@ -1,0 +1,81 @@
+.slide-in {
+  animation: slide-in 0.5s ease;
+}
+
+.slide-out {
+  animation: slide-out 0.5s ease;
+}
+
+@keyframes slide-in {
+from {
+  transform: translatey(-100%);
+}
+to {
+  transform: translatey(0);
+}
+}
+@keyframes slide-out {
+  from {
+      transform: translatey(0);
+  }
+  to {
+      transform: translatey(-120%);
+  }
+}
+
+.toast-success {
+  background-color: #d6f0e0 !important;
+  color: #0d6831;
+  border-color: #c0e7d0 !important;
+}
+
+.toast-warning {
+  background-color: #fbf0da !important;
+  color: #73510d;
+  border-color: #f9e4be !important;
+}
+
+.toast-danger{
+  background-color: #f9e1e5 !important;
+  color: #af233a;
+  border-color: #f4c8cf !important;
+}
+
+
+.toast-info {
+  background-color: #def1f7;
+  color: #1c657d;
+  border-color: #c6e6f1;
+}
+
+.pretty-link {
+  display: flex;
+  text-decoration: none;
+  color: #4897e7;
+  font-weight: bold;
+  transition: 1s all;
+  transform: translateX(-30px);
+}
+
+.pretty-link:hover {
+  text-decoration: none;
+  color: #48b3f0;
+  transform: translateX(10px);
+}
+
+.pretty-img {
+  width: 30px;
+  opacity: 0;
+  transition: 1s all;
+}
+
+.pretty-link:hover > .pretty-img {
+  opacity: 1;
+
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+

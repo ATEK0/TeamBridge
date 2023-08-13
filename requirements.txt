@@ -1,0 +1,13 @@
+Flask
+flask-login
+SQLAlchemy
+
+Flask-Script
+Flask-SQLAlchemy
+
+Jinja2
+MarkupSafe
+Werkzeug
+
+unidecode==1.3.6
+

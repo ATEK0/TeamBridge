@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<h1>Here are your notes</h1>
+<ul class="list-group list-group-flush" id="notes">
+    {% for note in client.notes %}
+    <li class="list-group-item">
+        <b>{{note.title}}</b>
+        {{note.text}}
+        <button type="button" class="close" onClick="deleteNote({{ note.id }})"><span aria-hidden="true">&times;</span></button>
+    </li>
+    {% endfor %}
+</ul>
+
+
+
+{% if inCompany %}
+
+{{ client.email}}
+{{ client.first_name}}
+{{ client.password}}
+
+{% else %}
+
+<div class="container">
+    
+    <div class="d-flex justify-content-center align-center" style="height: 80vh">
+        <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-center pt-4">
+            <h1 class="mb-2 text-center">Hey {{client.first_name}}!</h1>
+
+            <span class="pb-4 text-center text-dark">This is your personal dashboard, here you are going to be able to manage all your work in a single space!</span>
+
+            <div class="card mb-3">
+
+              <div class="card-body">
+
+                <div class="pt-4 pb-2">
+                  <h5 class="card-title text-center pb-0 fs-4">You are still not in a team</h5>
+                  <p class="text-center small">Start by joining a company or create your own!</p>
+                </div>
+
+                  <div class="col-12">
+                    <input type="text" name="joinCode" placeholder="Invite Code" class="form-control mb-2" id="joinCode" hidden>
+
+                    <button class="btn btn-primary w-100 mb-2" type="button" onClick="showCodeBox()">Join Company</button>
+                    <button class="btn btn-success w-100" type="button">Create Company</button>
+                  </div>
+
+                </form>
+
+              </div>
+            </div>
+
+          </div>
+    </div>
+</div>
+
+
+{% endif %}
+
+    <!-- <input type="text" class="form-control mg-3" id="title" name="title" placeholder="Note Title">
+    <textarea name="note" id="note" class="form-control"></textarea>
+    <br>
+    <div align="center">
+        <button type="submit" class="btn btn-primary">Add note</button>
+    </div> -->
+
+{% endblock %}

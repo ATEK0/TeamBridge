@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Gestor de ficheiros{% endblock %}
+
+{% block content %}
+
+
+
+<main id="main" class="main">
+    <section class="section">
+        <form method="POST" action="/file-explorer" enctype="multipart/form-data" >
+            <h3 align="center"><b>Your Files</b></h3>
+            <div class="form-group">
+                <input type="file" class="form-control" id="file" name="file" multiple>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary mb-3">Upload</button>
+        </form>
+      <div class="row">
+            <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">@{{client.username}} files</h5>
+              {{pathsize}} / 1000MB
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: {{pathpercent}}%" aria-valuenow="{{pathpercent}}" aria-valuemin="0" aria-valuemax="100">{{pathpercent}} %</div>
+              </div>
+
+              <!-- List group With Checkboxes and radios -->
+              <ul id="files" class="list-group pt-3">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col d-flex align-self-center">
+                            <input class="form-check-input me-3" style="visibility:hidden;" id="checkbox-general" type="checkbox" value="" aria-label="...">
+                            ID
+                        </div>
+                        <div class="col d-flex align-self-center">
+                            Name        
+                        </div>
+                        <div class="col d-flex align-self-center">
+                            File Type
+                        </div>
+                        <div class="col d-flex align-self-center">
+                            Upload Date
+                        </div>
+                        <div class="col d-flex align-self-center">
+                            Size (mb)
+                        </div>
+                        <div class="col d-flex align-self-center">
+                            Owner
+                        </div>
+                        <div class="col d-flex justify-content-end align-center" style="end: 0">
+                            <a><button type="button" class="btn btn-dark me-2" id="download-general" style="visibility:hidden;" onClick="DownloadMultipleFiles()"><i class="bi bi-download"></i></button></a>
+                            <a ><button type="button" class="btn btn-dark" id="delete-general" style="visibility:hidden;"><i class="bi bi-trash"></i></button></a>
+                        </div>
+                    </div>
+                </li>
+                {% if client.files %}
+
+                    {% for file in client.files %}
+                        <li class="list-group-item cursor" style="z-index: 10" onclick="HandleFileSelect({{file.id}})" id="{{file.id}}">
+                            <div class="row">
+                                <div class="col d-flex align-self-center">
+                                    <input class="form-check-input me-3" type="checkbox"  id="btn-{{file.id}}" class="checkFile" value="{{file.id}}" aria-label="...">
+                                    {{ file.id }}
+                                </div>
+                                <div class="col d-flex align-self-center pe-0" onclick="event.stopPropagation()">
+                                    <span onclick="changeFileName('a','{{file.id}}'); event.stopPropagation()">
+                                        <i id="changeNameIcon-{{file.id}}" class="bi bi-pencil me-1"></i></span>
+                                        <span id="changeNameOptions" onclick="FetchFileName('{{file.id}}', 'change', document.getElementById('changeNameInput-{{file.id}}').value)"><i id="changeNameIconConfirm-{{file.id}}" class="bg-success bi bi-check2 me-1 d-none changeNameIconConfirm"></i></span>
+                                        <span id="changeNameOptions" onclick="FetchFileName('{{file.id}}', 'close', '')"><i id="changeNameIconCancel-{{file.id}}" class="bg-danger bi bi-x me-1 d-none changeNameIconCancel"></i></span>
+                                    
+                                    <input type="text" onclick="" data-file-id="{{ file.id }}" class="changeNameInput rounded" id="changeNameInput-{{file.id}}" value="{{file.filename}}" disabled title="{{file.filename}}"/>
+                                </div>
+                                <div class="col d-flex align-self-center">
+                                    {{ file.file_type }}
+                                </div>
+                                <div class="col d-flex align-self-center">
+                                    {{ file.upload_date }}
+                                </div>
+                                <div class="col d-flex align-self-center">
+                                    {{ file.size }}
+                                </div>
+                                <div class="col d-flex align-self-center">
+                                    <a href="/profile/{{ file.username }}" class="pretty-link"><img class="pretty-img rounded-circle" src="{{file.user_image}}"><span class="d-flex align-self-center ms-1">{{ file.username }}</span></a>
+                                </div>
+                                <div class="col d-flex justify-content-end align-center" style="end: 0">
+                                    <a href="{{ url_for('fileExplorer.download', fileId=file.id) }}"><button type="button" onclick="event.stopPropagation()" class="btn btn-light me-2"><i class="bi bi-download"></i></button></a>
+                                    <a href="{{ url_for('fileExplorer.deleteFile', fileId=file.id) }}"><button type="button" onclick="event.stopPropagation()" class="btn btn-light "><i class="bi bi-trash"></i></button></a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor%}
+            
+                {% else %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col d-flex align-self-center">
+                            You have no files, why not start uploading some? 🤩
+                        </div>
+                    </div>
+                </li>
+                {% endif %}
+
+              </ul><!-- End List Checkboxes and radios -->
+            </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+
+
+
+{% endblock %}

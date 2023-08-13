@@ -1,0 +1,376 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>{{client.first_name}}'s Profile</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+      <div class="row">
+        <div class="col-xl-4">
+
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+              <img src="{{client.profile_pic}}" alt="Profile" class="rounded-circle">
+              <h2>{{client.first_name}} {{client.last_name}}</h2>
+              <h3>@{{client.username}}</h3>
+              <h4>{{client.job}}</h4>
+              <div class="social-links mt-2">
+                {% if client.twitter %}
+                  <a href="https://twitter.com/{{client.twitter}}" class="twitter"><i class="bi bi-twitter"></i></a>
+                {% endif %}
+
+                {% if client.facebook %}
+                  <a href="https://facebook.com/{{client.facebook}}" class="facebook"><i class="bi bi-facebook"></i></a>
+                {% endif %}
+
+                {% if client.instagram %}
+                  <a href="https://instagram.com/{{client.instagram}}" class="instagram"><i class="bi bi-instagram"></i></a>
+                {% endif %}
+
+                {% if client.linkedin %}
+                  <a href="https://linkedin.com/{{client.linkedin}}" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-xl-8">
+
+          <div class="card">
+            <div class="card-body pt-3">
+              <!-- Bordered Tabs -->
+              <ul class="nav nav-tabs nav-tabs-bordered">
+
+                <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                </li>
+                {% if client.username == profile%}
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Settings</button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                </li>
+              {% endif %}
+
+              </ul>
+              <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                  <h5 class="card-title">Biography</h5>
+                  <p class="small fst-italic">{{client.description}}</p>
+
+                  <h5 class="card-title">Profile Details</h5>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                    <div class="col-lg-9 col-md-8">{{client.first_name}} {{client.last_name}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Company</div>
+                    <div class="col-lg-9 col-md-8">To fill later if doesnt exists hide</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Job</div>
+                    <div class="col-lg-9 col-md-8">{{client.job}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Country</div>
+                    <div class="col-lg-9 col-md-8">{{client.country}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Email</div>
+                    <div class="col-lg-9 col-md-8">{{client.email}}</div>
+                  </div>
+
+                </div>
+
+                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+
+
+                  <div class="modal fade" id="modalUploadFoto" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <form method="post" action="/" name="profileImgHandler" id="profileImgHandler" enctype="multipart/form-data">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Change profile picture</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                                Upload your new photo here!
+                                <input type="file" name="profile_pic" class="form-control" id="profile_pic" accept="image/png, image/jpeg, image/jpg" maxlength="5000000">
+                          </div>
+                          <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" onclick="document.profileImgHandler.action = '/update-image';">Save changes</button>
+                                {% if client.profile_pic != '/static/default images/user.png' and client.profile_pic != '/static/default%20images/user.png'%}<button onclick="document.profileImgHandler.action = '/delete-profile-image';" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a> {% endif %}
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <!-- Profile Edit Form -->
+                  <form>
+                    <div class="row mb-3">
+                      <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                      <div class="col-md-8 col-lg-9">
+                        <div class="pt-2">
+                          <a href="" class="btn btn-primary btn-sm" title="Upload new profile image" data-bs-toggle="modal" data-bs-target="#modalUploadFoto">Edit <i class="bi bi-pencil ms-1"></i></a>
+                          
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      
+                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
+                        <div class="col-md-3 col-lg-3">
+                          <input name="fname" type="text" class="form-control" placeholder="First Name" id="fname" value="{{client.first_name}}">
+                        </div>
+                        <div class="col-md-3 col-lg-3">
+                          <input name="lname" type="text" class="form-control me-0" placeholder="Last Name" id="lname" value="{{client.last_name}}">
+                        </div>
+           
+                    </div>
+                    
+
+                    <div class="row mb-3">
+                      <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
+                      <div class="col-md-8 col-lg-9">
+                        <textarea name="about" class="form-control" id="about" style="height: 100px">{{client.description}}</textarea>
+                      </div>
+                    </div>
+
+                    <!-- <div class="row mb-3">
+                      <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="company" type="text" class="form-control" id="company" value="Lueilwitz, Wisoky and Leuschke">
+                      </div>
+                    </div> -->
+
+                    <div class="row mb-3">
+                      <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="job" type="text" class="form-control" id="Job" value="{{client.job}}">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="country" type="text" class="form-control" id="Country" value="{{client.country}}">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="email" type="email" class="form-control" id="Email" value="{{client.email}}" disabled>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="twitter" type="text" class="form-control" id="Twitter" placeholder="{% if client.twitter %} {{client.twitter}} {% else %} Twitter @ {% endif %}">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="facebook" type="text" class="form-control" id="Facebook" placeholder="{% if client.facebook %} {{client.facebook}} {% else %} Facebook @ {% endif %}">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="instagram" type="text" class="form-control" id="Instagram" placeholder="{% if client.instagram %} {{client.instagram}} {% else %} Instagram @ {% endif %}">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="linkedin" type="text" class="form-control" id="Linkedin" placeholder="{% if client.linkedin %} {{client.linkedin}} {% else %} Linkedin @ {% endif %}">
+                      </div>
+                    </div>
+
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary">Save Changes</button>
+                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccount" onClick="startCounter()">Delete Account</button>
+                    </div>
+                  </form><!-- End Profile Edit Form -->
+
+                  <div class="modal fade" id="deleteAccount" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Are you sure you want to delete your account?</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          This action will delete your account, and it's not reversible. You will lose all your files and notes saved in TeamGroup.
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nevermind close this</button>
+                          <button type="button" id="deleteButton" class="btn btn-danger" onClick="window.location.href='{{ url_for('profilePage.deleteAccount', id=client.id) }}'" disabled>5</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- End Vertically centered Modal-->
+
+                </div>
+
+                <div class="tab-pane fade pt-3" id="profile-settings">
+
+                  <!-- Settings Form -->
+                  <form>
+
+                    <div class="row mb-3">
+                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Notifications</label>
+                      <div class="col-md-8 col-lg-9">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="securityNotify" checked disabled>
+                          <label class="form-check-label" for="securityNotify">
+                            Security alerts
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </form><!-- End settings Form -->
+
+                </div>
+
+                <div class="tab-pane fade pt-3" id="profile-change-password">
+                  <!-- Change Password Form -->
+                  <form method="POST" action="/change-password">
+
+                    <div class="row mb-3">
+                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="password" type="password" class="form-control" id="currentPassword">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="newpassword" type="password" minlength="7" class="form-control" id="newPassword">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="renewpassword" minlength="7" type="password" class="form-control" id="renewPassword">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="forgotPassword" class="col-md-4 col-lg-3 col-form-label">Forgot your password?</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input type="button" class="btn btn-primary" value="Send Password Reset" onclick="resetPassword({{client.id}})">
+                      </div>
+                    </div>
+
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary">Change Password</button>
+                    </div>
+                  </form><!-- End Change Password Form -->
+
+                </div>
+
+              </div><!-- End Bordered Tabs -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+
+<!-- <p>Isto é o login</p>
+
+
+<form method="POST" enctype="multipart/form-data">
+
+    <b>Username: <input type="text" class="form-control" id="username" name="username" placeholder="{{client.first_name}}"></b><br>
+    <b>Email: <input type="email" class="form-control" id="email" name="email" placeholder="{{client.email}}"></b><br>
+    <b>Password: <input class="form-control" type="password" id="passwordNow" name="passwordNow"></b><br>
+    <b>Confirm Password: <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm"></b><br>
+    <b>Profile Picture: <input type="password" class="form-control" id="profile_pic" name="profile_pic"></b><br>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+
+</form>
+
+<b>Espaço ocupado:</b><br>
+
+<div class="progress">
+    {% if used_space <= 60 %}
+        <div class="progress-bar bg-success" role="progressbar" style="width: {{used_space}}%;" aria-valuenow="{{used_space}}" aria-valuemin="0" aria-valuemax="100">{{used_space}}%</div>
+    </div>
+    {% elif used_space > 60 and used_space <=80 %}
+        <div class="progress-bar bg-warning" role="progressbar" style="width: {{used_space}}%;" aria-valuenow="{{used_space}}" aria-valuemin="0" aria-valuemax="100">{{used_space}}%</div>
+    </div>
+        <a href="#">Limpar cloud</a>
+    {% elif used_space > 80 %}
+        <div class="progress-bar bg-danger" role="progressbar" style="width: {{used_space}}%;" aria-valuenow="{{used_space}}" aria-valuemin="0" aria-valuemax="100">{{used_space}}%</div>
+    </div>
+        <a href="#">Limpar cloud</a>
+    {%endif%}
+  
+
+
+<a href=""></a>
+
+<button type="button btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="startCounter()">Apagar conta</button>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Delete Account</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Are you sure you want to delete your account? This action cannot be undone.
+            <div id="countdown"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="deleteButton" onclick="deleteAccount()" disabled>Delete</button>
+        </div>
+        </div>
+    </div>
+    </div>
+    
+    <script>
+    
+    </script> -->
+{% endblock %}

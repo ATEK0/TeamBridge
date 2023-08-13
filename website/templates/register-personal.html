@@ -1,0 +1,124 @@
+{%extends "base.html"%}
+{% block title %}Register{% endblock%}
+
+{% block content %}
+
+
+<form class="mt-5" method="POST" id="add-infos-user" enctype="multipart/form-data">
+    <div class="container register-personal">
+      <section class="section register d-flex flex-column py-4">
+        <div class="container">
+          
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+              <div class="card mb-3">
+
+                <div class="card-body">
+
+                  <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Hi {{client.first_name}}</h5>
+                    <p class="text-center small">Enter your personal information to be better known by your company</p>
+                  </div>
+
+                    <div class="col-12 mx-auto mt-1">
+                        <label for="yourName" class="form-label">Biography</label>
+                        <textarea class="form-control" name="bio" placeholder="Here should be your bio...why is not?" id="bio" style="height: 100px;"></textarea>
+                    </div>
+
+
+                    <div class="col-12 mx-auto mt-1">
+                      <label for="yourName" class="form-label">Birthdate</label>
+                      <input type="date" id="birth" name="birth" class="form-control" required>
+                  </div>
+                    
+
+                    <div class="col-12 mx-auto mt-1">
+                        <label for="yourName" class="form-label">Job</label>
+                        <input type="text" name="job" class="form-control" id="job" required>
+                        <div class="invalid-feedback">Please, enter your position</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="country" class="form-label">Country</label>
+                        <select  class="form-select" name='country' aria-label="Default select example">
+                          <option selected>Open this select menu</option>
+                          {% for country in countries %}
+                            <option value="{{countries[country]}}"><i class="bi bi-funnel"></i> {{countries[country]}}</option>
+                          {% endfor %}
+                        </select>
+                      <div class="invalid-feedback" id="invalid-country">Please select a valid country!</div>
+                    </div>
+                    
+
+                    <div class="col-12 mt-1">
+                      <label for="yourUsername" class="form-label">Username</label>
+                      <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                        <input type="text" name="username" class="form-control" id="yourUsername" required>
+                        <div class="invalid-feedback" id="invalid-username">Please choose a username.</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 mt-4" style="display:flex;justify-content:center;align-items:center;">
+                      <button class="btn btn-primary w-100" type="submit" onClick="addInfosHandler('checking')">Finish Registration</button>
+                    </div>
+
+
+
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+</form>
+
+<script>
+  function addInfosHandler(type) {
+    event.preventDefault()
+    var birth = document.getElementById("birth").value;
+    
+    const data = {
+      type: "checking",
+      username: $("#yourUsername").val()
+    };
+    
+    fetch('/add-infos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(result => {
+        // Process the response
+        console.log(result);
+        if (result["message"] === 'OK'){
+          if (birth === '' || birth === null) {
+            const field = document.getElementById('birth');
+            field.setCustomValidity('Please fill this field');
+            field.reportValidity();
+          } else if ($("#yourUsername").val().length < 3) { 
+            showToast('danger', "Your username needs to be bigger than 3 characters");
+          } else {
+            document.getElementById("add-infos-user").submit();
+          }
+        } else {
+          showToast('danger', result["message"]);
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occur during the request
+        console.error('Error:', error);
+      });
+    
+  }
+</script>
+
+{%endblock%}
